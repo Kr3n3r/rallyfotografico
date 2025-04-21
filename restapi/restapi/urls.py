@@ -16,8 +16,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
+from . import views
+from django.conf import settings
+from django.conf.urls.static import static
+
+router = routers.DefaultRouter()
+
+router.register(r'users', views.UserViewSet)
+router.register(r'roles', views.RoleViewSet)
+router.register(r'contests', views.ContestViewSet)
+router.register(r'photos', views.PhotoViewSet)
+router.register(r'votes', views.VoteViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('restapi.api.urls')),
+    path('', include(router.urls)),
+    path('auth/', include('rest_framework.urls')),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
