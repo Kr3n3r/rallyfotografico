@@ -14,6 +14,11 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
 
+    # Create a new user and set the password if provided.
+    def perform_create(self, serializer):
+        user = serializer.save()
+        user.set_password(self.request.data['password'])
+        user.save()
 
 class RoleViewSet(viewsets.ModelViewSet):
     """
