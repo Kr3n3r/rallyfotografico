@@ -1,0 +1,144 @@
+package client;
+
+import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+import client.model.*;
+
+public class JsonUtil {
+  public static GsonBuilder gsonBuilder;
+
+  static {
+    gsonBuilder = new GsonBuilder();
+    gsonBuilder.serializeNulls();
+
+    gsonBuilder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+      @Override
+      public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        String dateStr = json.getAsString();
+
+        // Lista de posibles formatos a intentar
+        String[] formats = new String[] {
+                "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+                "yyyy-MM-dd'T'HH:mm:ss.SS'Z'",
+                "yyyy-MM-dd'T'HH:mm:ss'Z'",
+                "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",
+                "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", // Con zona horaria tipo +00:00
+                "yyyy-MM-dd'T'HH:mm:ssXXX"
+        };
+
+        for (String format : formats) {
+          try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+            return sdf.parse(dateStr);
+          } catch (ParseException ignored) {
+          }
+        }
+
+        throw new JsonParseException("Unrecognized date format: " + dateStr);
+      }
+    });
+  }
+
+  public static Gson getGson() {
+    return gsonBuilder.create();
+  }
+
+  public static String serialize(Object obj) {
+    return getGson().toJson(obj);
+  }
+
+  public static <T> T deserializeToList(String jsonString, Class cls) {
+    return getGson().fromJson(jsonString, getListTypeForDeserialization(cls));
+  }
+
+  public static <T> T deserializeToObject(String jsonString, Class cls) {
+    return getGson().fromJson(jsonString, getTypeForDeserialization(cls));
+  }
+
+  public static Type getListTypeForDeserialization(Class cls) {
+    String className = cls.getSimpleName();
+
+    if ("Contest".equalsIgnoreCase(className)) {
+      return new TypeToken<List<Contest>>(){}.getType();
+    }
+    if ("PatchedContest".equalsIgnoreCase(className)) {
+      return new TypeToken<List<PatchedContest>>(){}.getType();
+    }
+    if ("PatchedPhoto".equalsIgnoreCase(className)) {
+      return new TypeToken<List<PatchedPhoto>>(){}.getType();
+    }
+    if ("PatchedRole".equalsIgnoreCase(className)) {
+      return new TypeToken<List<PatchedRole>>(){}.getType();
+    }
+    if ("PatchedUser".equalsIgnoreCase(className)) {
+      return new TypeToken<List<PatchedUser>>(){}.getType();
+    }
+    if ("PatchedVote".equalsIgnoreCase(className)) {
+      return new TypeToken<List<PatchedVote>>(){}.getType();
+    }
+    if ("Photo".equalsIgnoreCase(className)) {
+      return new TypeToken<List<Photo>>(){}.getType();
+    }
+    if ("Role".equalsIgnoreCase(className)) {
+      return new TypeToken<List<Role>>(){}.getType();
+    }
+    if ("StatusEnum".equalsIgnoreCase(className)) {
+      return new TypeToken<List<StatusEnum>>(){}.getType();
+    }
+    if ("User".equalsIgnoreCase(className)) {
+      return new TypeToken<List<User>>(){}.getType();
+    }
+    if ("Vote".equalsIgnoreCase(className)) {
+      return new TypeToken<List<Vote>>(){}.getType();
+    }
+
+    return new TypeToken<List<Object>>(){}.getType();
+  }
+
+  public static Type getTypeForDeserialization(Class cls) {
+    String className = cls.getSimpleName();
+
+    if ("Contest".equalsIgnoreCase(className)) {
+      return new TypeToken<Contest>(){}.getType();
+    }
+    if ("PatchedContest".equalsIgnoreCase(className)) {
+      return new TypeToken<PatchedContest>(){}.getType();
+    }
+    if ("PatchedPhoto".equalsIgnoreCase(className)) {
+      return new TypeToken<PatchedPhoto>(){}.getType();
+    }
+    if ("PatchedRole".equalsIgnoreCase(className)) {
+      return new TypeToken<PatchedRole>(){}.getType();
+    }
+    if ("PatchedUser".equalsIgnoreCase(className)) {
+      return new TypeToken<PatchedUser>(){}.getType();
+    }
+    if ("PatchedVote".equalsIgnoreCase(className)) {
+      return new TypeToken<PatchedVote>(){}.getType();
+    }
+    if ("Photo".equalsIgnoreCase(className)) {
+      return new TypeToken<Photo>(){}.getType();
+    }
+    if ("Role".equalsIgnoreCase(className)) {
+      return new TypeToken<Role>(){}.getType();
+    }
+    if ("StatusEnum".equalsIgnoreCase(className)) {
+      return new TypeToken<StatusEnum>(){}.getType();
+    }
+    if ("User".equalsIgnoreCase(className)) {
+      return new TypeToken<User>(){}.getType();
+    }
+    if ("Vote".equalsIgnoreCase(className)) {
+      return new TypeToken<Vote>(){}.getType();
+    }
+
+    return new TypeToken<Object>(){}.getType();
+  }
+}
