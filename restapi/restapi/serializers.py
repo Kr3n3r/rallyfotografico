@@ -40,4 +40,4 @@ class PhotoSerializer(serializers.HyperlinkedModelSerializer):
 class VoteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Vote
-        fields = ['id', 'photo', 'timestamp']
+        fields = ['id', 'user', 'photo', 'timestamp']
