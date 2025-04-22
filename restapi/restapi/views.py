@@ -71,16 +71,16 @@ class VoteViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save(user=self.request.user)
 
     def perform_update(self, serializer, *args, **kwargs):
         UPDATE_ERROR_MSG = "You cannot update this vote because you are not the owner."
-        if self.request.user != serializer.user:
+        if self.request.user != serializer:
             raise PermissionDenied(UPDATE_ERROR_MSG)
         return super().perform_update(serializer)
 
     def perform_destroy(self, serializer, *args, **kwargs):
         DELETE_ERROR_MSG = "You cannot delete this vote because you are not the owner."
-        if self.request.user != serializer.user:
+        if self.request.user != serializer:
             raise PermissionDenied(DELETE_ERROR_MSG)
         return super().perform_destroy(serializer)
