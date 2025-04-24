@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">RallyFotografico</string>
+    <string name="app_name">My Application</string>
+    <string name="title_activity_contest">ContestActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Admin Dashboard</string>
+    <string name="title_notifications">Sign Up</string>
+    <string name="title_gallery">Gallery</string>
+    <string name="contest_description">Description example placeholder</string>
+    <string name="contest_closes_in">Contest closes in</string>
+    <string name="contest_title">Contest title placeholder</string>
+    <string name="view_details_title">View Details</string>
+    <string name="submission_deadline_title">View Details</string>
+    <string name="submission_deadline">30/10/2023</string>
+    <string name="voting_deadline_title">Voting deadline:</string>
+    <string name="voting_deadline">4/11/2023</string>
 </resources>
