@@ -46,7 +46,7 @@ public class SignUpActivity extends AppCompatActivity {
         EditText passwordEditText = findViewById(R.id.et_password);
 
         loginLink.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ContestActivity.class);
+            Intent intent = new Intent(this, LogInActivity.class);
             startActivity(intent);
         });
 
