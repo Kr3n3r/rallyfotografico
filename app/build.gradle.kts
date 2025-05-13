@@ -6,6 +6,18 @@ android {
     namespace = "es.alejandromarmol.rallyfotografico"
     compileSdk = 34
 
+    packaging {
+        resources {
+            excludes += setOf(
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt"
+            )
+        }
+    }
+
     defaultConfig {
         applicationId = "es.alejandromarmol.rallyfotografico"
         minSdk = 27
@@ -32,6 +44,13 @@ android {
 }
 
 dependencies {
+
+    implementation("io.swagger:swagger-annotations:1.6.6")
+    implementation ("com.google.code.gson:gson:2.10.1")
+    implementation ("org.apache.httpcomponents:httpcore:4.4.16")
+    implementation ("org.apache.httpcomponents:httpmime:4.5.14")
+    implementation ("com.android.volley:volley:1.2.1")
+    testImplementation ("junit:junit:4.13.2")
 
     implementation(libs.appcompat)
     implementation(libs.material)
