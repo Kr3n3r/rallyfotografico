@@ -29,7 +29,7 @@ public class Photo {
   @SerializedName("name")
   private String name = null;
   @SerializedName("owner")
-  private URI owner = null;
+  private String owner = null;
   @SerializedName("status")
   private StatusEnum status = null;
   @SerializedName("upload_date")
@@ -72,10 +72,10 @@ public class Photo {
   /**
    **/
   @ApiModelProperty(required = true, value = "")
-  public URI getOwner() {
+  public String getOwner() {
     return owner;
   }
-  public void setOwner(URI owner) {
+  public void setOwner(String owner) {
     this.owner = owner;
   }
 

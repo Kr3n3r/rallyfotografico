@@ -31,6 +31,8 @@ class ContestSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class PhotoSerializer(serializers.HyperlinkedModelSerializer):
+    owner = serializers.CharField(source='owner.username')
+
     class Meta:
         model = Photo
         fields = ['id', 'image', 'name', 'owner',

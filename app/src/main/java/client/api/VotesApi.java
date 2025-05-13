@@ -97,7 +97,7 @@ public class VotesApi {
       // normal form params
     }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, authNames);
@@ -165,7 +165,7 @@ public class VotesApi {
       // normal form params
           }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, authNames,
@@ -224,7 +224,7 @@ public class VotesApi {
       // normal form params
     }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType, authNames);
@@ -292,7 +292,7 @@ public class VotesApi {
       // normal form params
           }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType, authNames,
@@ -341,7 +341,7 @@ public class VotesApi {
       // normal form params
     }
 
-    String[] authNames = new String[] {};
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
@@ -404,7 +404,7 @@ public class VotesApi {
       // normal form params
           }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
@@ -467,7 +467,7 @@ public class VotesApi {
       // normal form params
     }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "PATCH", queryParams, postBody, headerParams, formParams, contentType, authNames);
@@ -535,7 +535,7 @@ public class VotesApi {
       // normal form params
           }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "PATCH", queryParams, postBody, headerParams, formParams, contentType, authNames,
@@ -594,7 +594,7 @@ public class VotesApi {
       // normal form params
     }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
@@ -662,7 +662,7 @@ public class VotesApi {
       // normal form params
           }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
@@ -730,7 +730,7 @@ public class VotesApi {
       // normal form params
     }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType, authNames);
@@ -803,7 +803,7 @@ public class VotesApi {
       // normal form params
           }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType, authNames,
