@@ -24,6 +24,12 @@ public class LauncherActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        try {
+            Session.checkTokenAndIntent(this, ContestActivity.class, this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.btn_get_started), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

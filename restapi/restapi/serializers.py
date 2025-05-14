@@ -31,10 +31,16 @@ class ContestSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class PhotoSerializer(serializers.HyperlinkedModelSerializer):
+    owner_name = serializers.CharField(source='owner.username')
+    uri = serializers.SerializerMethodField()
+    # This method generates a URI for the photo.
+    def get_uri(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(f'/photos/{obj.id}/')
+
     class Meta:
         model = Photo
-        fields = ['id', 'image', 'name', 'owner',
-                  'status', 'upload_date', 'votes', 'contest']
+        fields = ['id', 'image', 'name', 'owner_name', 'owner','status', 'upload_date', 'votes', 'contest', 'uri']
 
 
 class VoteSerializer(serializers.HyperlinkedModelSerializer):

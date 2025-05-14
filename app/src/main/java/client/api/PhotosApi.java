@@ -97,7 +97,7 @@ public class PhotosApi {
       // normal form params
     }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, authNames);
@@ -165,7 +165,7 @@ public class PhotosApi {
       // normal form params
           }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, authNames,
@@ -224,7 +224,7 @@ public class PhotosApi {
       // normal form params
     }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType, authNames);
@@ -292,7 +292,7 @@ public class PhotosApi {
       // normal form params
           }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType, authNames,
@@ -314,9 +314,10 @@ public class PhotosApi {
   /**
   * 
   * API endpoint that allows photos to be viewed or edited.
+   * @param contest 
    * @return List<Photo>
   */
-  public List<Photo> photosList () throws TimeoutException, ExecutionException, InterruptedException, ApiException {
+  public List<Photo> photosList (UUID contest) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
     Object postBody = null;
 
     // create path and map variables
@@ -328,6 +329,7 @@ public class PhotosApi {
     Map<String, String> headerParams = new HashMap<String, String>();
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "contest", contest));
     String[] contentTypes = {
     };
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
@@ -341,7 +343,7 @@ public class PhotosApi {
       // normal form params
     }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
@@ -370,9 +372,9 @@ public class PhotosApi {
       /**
    * 
    * API endpoint that allows photos to be viewed or edited.
-
+   * @param contest 
   */
-  public void photosList (final Response.Listener<List<Photo>> responseListener, final Response.ErrorListener errorListener) {
+  public void photosList (UUID contest, final Response.Listener<List<Photo>> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
 
@@ -386,6 +388,7 @@ public class PhotosApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
 
+    queryParams.addAll(ApiInvoker.parameterToPairs("", "contest", contest));
 
 
     String[] contentTypes = {
@@ -404,7 +407,7 @@ public class PhotosApi {
       // normal form params
           }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
@@ -467,7 +470,7 @@ public class PhotosApi {
       // normal form params
     }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "PATCH", queryParams, postBody, headerParams, formParams, contentType, authNames);
@@ -535,7 +538,7 @@ public class PhotosApi {
       // normal form params
           }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "PATCH", queryParams, postBody, headerParams, formParams, contentType, authNames,
@@ -594,7 +597,7 @@ public class PhotosApi {
       // normal form params
     }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
@@ -662,7 +665,7 @@ public class PhotosApi {
       // normal form params
           }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
@@ -730,7 +733,7 @@ public class PhotosApi {
       // normal form params
     }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType, authNames);
@@ -803,7 +806,7 @@ public class PhotosApi {
       // normal form params
           }
 
-    String[] authNames = new String[] { "basicAuth", "cookieAuth" };
+    String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType, authNames,
