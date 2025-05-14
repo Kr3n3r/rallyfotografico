@@ -42,9 +42,17 @@ class ContestViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows contests to be viewed or edited.
     """
+    def get_permissions(self):
+        if self.action in ['list'] :
+            return [AllowAny()]
+        elif self.action in ['create', 'update', 'partial_update', 'retrieve']:
+            return [IsAuthenticated()]
+        else:
+            return [IsAdminUser()]
+    
     queryset = Contest.objects.all().order_by('name')
     serializer_class = ContestSerializer
-    permission_classes = [permissions.IsAdminUser]
+    # permission_classes = [permissions.IsAdminUser]
 
 
 class PhotoViewSet(viewsets.ModelViewSet):
