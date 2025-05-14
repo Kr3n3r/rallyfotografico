@@ -20,7 +20,8 @@ from rest_framework import routers
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from drf_spectacular.views import SpectacularAPIView
+from rest_framework.authtoken.views import obtain_auth_token
 
 router = routers.DefaultRouter()
 
@@ -33,7 +34,8 @@ router.register(r'votes', views.VoteViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
-    path('auth/', include('rest_framework.urls')),
+    # path('auth/', include('rest_framework.urls')),
+    path('auth/', obtain_auth_token),
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
 ]
 

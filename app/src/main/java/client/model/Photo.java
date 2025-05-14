@@ -28,6 +28,8 @@ public class Photo {
   private URI image = null;
   @SerializedName("name")
   private String name = null;
+  @SerializedName("owner_name")
+  private String ownerName = null;
   @SerializedName("owner")
   private URI owner = null;
   @SerializedName("status")
@@ -38,6 +40,8 @@ public class Photo {
   private String votes = null;
   @SerializedName("contest")
   private URI contest = null;
+  @SerializedName("uri")
+  private String uri = null;
 
   /**
    **/
@@ -67,6 +71,16 @@ public class Photo {
   }
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(required = true, value = "")
+  public String getOwnerName() {
+    return ownerName;
+  }
+  public void setOwnerName(String ownerName) {
+    this.ownerName = ownerName;
   }
 
   /**
@@ -119,6 +133,16 @@ public class Photo {
     this.contest = contest;
   }
 
+  /**
+   **/
+  @ApiModelProperty(required = true, value = "")
+  public String getUri() {
+    return uri;
+  }
+  public void setUri(String uri) {
+    this.uri = uri;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -132,11 +156,13 @@ public class Photo {
     return (this.id == null ? photo.id == null : this.id.equals(photo.id)) &&
         (this.image == null ? photo.image == null : this.image.equals(photo.image)) &&
         (this.name == null ? photo.name == null : this.name.equals(photo.name)) &&
+        (this.ownerName == null ? photo.ownerName == null : this.ownerName.equals(photo.ownerName)) &&
         (this.owner == null ? photo.owner == null : this.owner.equals(photo.owner)) &&
         (this.status == null ? photo.status == null : this.status.equals(photo.status)) &&
         (this.uploadDate == null ? photo.uploadDate == null : this.uploadDate.equals(photo.uploadDate)) &&
         (this.votes == null ? photo.votes == null : this.votes.equals(photo.votes)) &&
-        (this.contest == null ? photo.contest == null : this.contest.equals(photo.contest));
+        (this.contest == null ? photo.contest == null : this.contest.equals(photo.contest)) &&
+        (this.uri == null ? photo.uri == null : this.uri.equals(photo.uri));
   }
 
   @Override
@@ -145,11 +171,13 @@ public class Photo {
     result = 31 * result + (this.id == null ? 0: this.id.hashCode());
     result = 31 * result + (this.image == null ? 0: this.image.hashCode());
     result = 31 * result + (this.name == null ? 0: this.name.hashCode());
+    result = 31 * result + (this.ownerName == null ? 0: this.ownerName.hashCode());
     result = 31 * result + (this.owner == null ? 0: this.owner.hashCode());
     result = 31 * result + (this.status == null ? 0: this.status.hashCode());
     result = 31 * result + (this.uploadDate == null ? 0: this.uploadDate.hashCode());
     result = 31 * result + (this.votes == null ? 0: this.votes.hashCode());
     result = 31 * result + (this.contest == null ? 0: this.contest.hashCode());
+    result = 31 * result + (this.uri == null ? 0: this.uri.hashCode());
     return result;
   }
 
@@ -161,11 +189,13 @@ public class Photo {
     sb.append("  id: ").append(id).append("\n");
     sb.append("  image: ").append(image).append("\n");
     sb.append("  name: ").append(name).append("\n");
+    sb.append("  ownerName: ").append(ownerName).append("\n");
     sb.append("  owner: ").append(owner).append("\n");
     sb.append("  status: ").append(status).append("\n");
     sb.append("  uploadDate: ").append(uploadDate).append("\n");
     sb.append("  votes: ").append(votes).append("\n");
     sb.append("  contest: ").append(contest).append("\n");
+    sb.append("  uri: ").append(uri).append("\n");
     sb.append("}\n");
     return sb.toString();
   }

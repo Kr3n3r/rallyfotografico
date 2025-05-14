@@ -4,7 +4,8 @@ from rest_framework.exceptions import PermissionDenied
 
 from .serializers import RoleSerializer, UserSerializer, ContestSerializer, PhotoSerializer, VoteSerializer
 from api.models import Contest, Photo, Vote
-
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from rest_framework.authtoken.models import Token
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -12,14 +13,22 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAdminUser]
+    def get_permissions(self):
+        if self.action in ['create', 'list'] :
+            return [AllowAny()]
+        elif self.action in ['update', 'partial_update', 'retrieve']:
+            return [IsAuthenticated()]
+        else:
+            return [IsAdminUser()]
 
     # Create a new user and set the password if provided.
     def perform_create(self, serializer):
         user = serializer.save()
-        user.set_password(self.request.data['password'])
-        user.save()
-
+        password = self.request.data.get('password')
+        if password:
+            user.set_password(password)
+            user.save()
+        Token.objects.create(user=user)
 class RoleViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows roles to be viewed or edited.
@@ -33,18 +42,31 @@ class ContestViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows contests to be viewed or edited.
     """
+    def get_permissions(self):
+        if self.action in ['list'] :
+            return [AllowAny()]
+        elif self.action in ['create', 'update', 'partial_update', 'retrieve']:
+            return [IsAuthenticated()]
+        else:
+            return [IsAdminUser()]
+    
     queryset = Contest.objects.all().order_by('name')
     serializer_class = ContestSerializer
-    permission_classes = [permissions.IsAdminUser]
+    # permission_classes = [permissions.IsAdminUser]
 
 
 class PhotoViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows photos to be viewed or edited.
     """
+    from django_filters.rest_framework import DjangoFilterBackend
+
     queryset = Photo.objects.all().order_by('upload_date')
     serializer_class = PhotoSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['contest']
+
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

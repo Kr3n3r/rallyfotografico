@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Colores base -->
+    <color name="primary">#49e3cd</color> <!-- Verde tipo Google Photos -->
+    <color name="primary_dark">#388E3C</color>
+    <color name="accent">#FFC107</color> <!-- Amarillo -->
+    <color name="background">#FFFFFF</color>
+    <color name="surface">#F5F5F5</color>
+
+    <!-- Texto -->
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="gray">#9E9E9E</color>
+    <color name="dark_gray">#616161</color>
+    <color name="light_gray">#E0E0E0</color>
+
+    <!-- Input / estados -->
+    <color name="input_background">#DDDDDD</color>
+    <color name="error">#F44336</color>
+    <color name="success">#4CAF50</color>
+
+    <!-- Translucencias opcionales -->
+    <color name="overlay">#80000000</color> <!-- Negro al 50% -->
 </resources>

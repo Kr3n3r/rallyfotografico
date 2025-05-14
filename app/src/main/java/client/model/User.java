@@ -29,7 +29,9 @@ public class User {
   @SerializedName("groups")
   private List<URI> groups = null;
   @SerializedName("photos")
-  private String photos = null;
+  private List<URI> photos = null;
+  @SerializedName("password")
+  private String password = null;
 
   /**
    **/
@@ -76,11 +78,21 @@ public class User {
   /**
    **/
   @ApiModelProperty(required = true, value = "")
-  public String getPhotos() {
+  public List<URI> getPhotos() {
     return photos;
   }
-  public void setPhotos(String photos) {
+  public void setPhotos(List<URI> photos) {
     this.photos = photos;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(required = true, value = "")
+  public String getPassword() {
+    return password;
+  }
+  public void setPassword(String password) {
+    this.password = password;
   }
 
 
