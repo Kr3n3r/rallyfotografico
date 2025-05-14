@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import client.model.AuthToken;
+import es.alejandromarmol.rallyfotografico.Session;
 import es.alejandromarmol.rallyfotografico.databinding.FragmentNotificationsBinding;
 
 public class NotificationsFragment extends Fragment {
@@ -26,6 +28,13 @@ public class NotificationsFragment extends Fragment {
 
         final TextView textView = binding.textNotifications;
         notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        try {
+            AuthToken authToken = new AuthToken();
+            authToken.setToken("");
+            Session.setToken(authToken,this.getContext());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return root;
     }
 

@@ -33,6 +33,8 @@ import client.model.Photo;
 
 import client.model.User;
 import client.model.Vote;
+import es.alejandromarmol.rallyfotografico.R;
+import es.alejandromarmol.rallyfotografico.Session;
 import es.alejandromarmol.rallyfotografico.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
@@ -54,7 +56,7 @@ public class HomeFragment extends Fragment {
 
         // Configurar RecyclerView
         binding.recyclerPhotos.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new PhotoAdapter(getContext(), photoList);
+        adapter = new PhotoAdapter(getContext(), photoList, getString(R.string.view_details_title), photo -> photo.getName() ,null);
         binding.recyclerPhotos.setAdapter(adapter);
         binding.recyclerPhotos.addItemDecoration(new VerticalSpacingItemDecoration(24));
 
@@ -109,8 +111,7 @@ public class HomeFragment extends Fragment {
         new Thread(() -> {
             try {
                 PhotosApi photosApi = new PhotosApi();
-                photosApi.getInvoker().setUsername("admin");
-                photosApi.getInvoker().setPassword("admin");
+                photosApi.getInvoker().setApiKey(Session.getToken(this.getContext()));
                 List<Photo> responsePhotos = photosApi.photosList(contest.getId());
 
 
@@ -136,9 +137,9 @@ public class HomeFragment extends Fragment {
         new Thread(() -> {
             try {
                 ContestsApi contestsApi = new ContestsApi();
-                contestsApi.getInvoker().setUsername("admin");
-                contestsApi.getInvoker().setPassword("admin");
+                contestsApi.getInvoker().setApiKey(Session.getToken(this.getContext()));
                 this.contest = contestsApi.contestsList().get(0);
+                Session.setContest(contest, this.getContext());
                 Log.d("INFO",contest.toString());
 
                 loadContestName();

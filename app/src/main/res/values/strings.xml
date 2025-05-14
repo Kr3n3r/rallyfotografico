@@ -9,8 +9,9 @@
     <string name="contest_closes_in">Contest closes in</string>
     <string name="contest_title">Contest title placeholder</string>
     <string name="view_details_title">View Details</string>
-    <string name="submission_deadline_title">View Details</string>
+    <string name="submission_deadline_title">Submission deadline:</string>
     <string name="submission_deadline">30/10/2023</string>
     <string name="voting_deadline_title">Voting deadline:</string>
     <string name="voting_deadline">4/11/2023</string>
+    <string name="vote_title">Vote</string>
 </resources>

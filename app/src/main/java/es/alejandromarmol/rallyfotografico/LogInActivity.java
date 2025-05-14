@@ -17,6 +17,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import client.ApiException;
 import client.api.AuthApi;
 import client.api.UsersApi;
 import client.model.AuthToken;
@@ -35,6 +36,12 @@ public class LogInActivity extends AppCompatActivity {
         EditText usernameEditText = findViewById(R.id.et_fullname);
         EditText passwordEditText = findViewById(R.id.et_password);
 
+        try {
+            Session.checkTokenAndIntent(this, ContestActivity.class,this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         registerLink.setOnClickListener(v -> {
             Intent intent = new Intent(this, SignUpActivity.class);
             startActivity(intent);
@@ -43,30 +50,33 @@ public class LogInActivity extends AppCompatActivity {
         submitButton.setOnClickListener(v -> {
             new Thread(() -> {
                 try {
-                    // LOG IN
                     String username = usernameEditText.getText().toString();
                     String password = passwordEditText.getText().toString();
                     AuthApi authApi = new AuthApi();
-                    AuthToken token = authApi.authCreate(username,password,"");
-                    UsersApi usersApi = new UsersApi();
-                    usersApi.getInvoker().setApiKey(token.getToken());
-                    usersApi.usersList();
-//                    Intent intent = new Intent(this, ContestActivity.class);
-//                    startActivity(intent);
+                    AuthToken token = authApi.authCreate(username, password, "");
+
+                    // Si llegamos aquí, la autenticación fue exitosa
+                    Session.setToken(token, this);
+
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Usuario autenticado correctamente", Toast.LENGTH_SHORT).show();
+                        // Solo aquí lanzamos el Intent
+                        Intent intent = new Intent(this, ContestActivity.class);
+                        startActivity(intent);
+                    });
+
+                } catch (ApiException apiException) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Error de autenticación: " + apiException.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                     runOnUiThread(() -> {
-                        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
-                } finally {
-                    runOnUiThread(() -> {
-                        Toast.makeText(this, "Se han cargado correctamente los usuarios", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Error inesperado: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
                 }
             }).start();
-
         });
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.btn_submit), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

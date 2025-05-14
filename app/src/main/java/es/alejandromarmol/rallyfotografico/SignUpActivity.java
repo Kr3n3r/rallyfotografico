@@ -21,11 +21,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import client.ApiException;
+import client.api.AuthApi;
 import client.api.ContestsApi;
 import client.api.PhotosApi;
 import client.api.RolesApi;
 import client.api.UsersApi;
 import client.api.VotesApi;
+import client.model.AuthToken;
 import client.model.Contest;
 import client.model.Role;
 import client.model.User;
@@ -45,38 +47,57 @@ public class SignUpActivity extends AppCompatActivity {
         EditText emailEditText = findViewById(R.id.et_email);
         EditText passwordEditText = findViewById(R.id.et_password);
 
+        try {
+            Session.checkTokenAndIntent(this,ContestActivity.class,this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         loginLink.setOnClickListener(v -> {
             Intent intent = new Intent(this, LogInActivity.class);
             startActivity(intent);
         });
 
-//        submitButton.setOnClickListener(v -> {
-//            new Thread(() -> {
-//                try {
-//                    // REGISTER
-//                    String username = usernameEditText.getText().toString();
-//                    String email = emailEditText.getText().toString();
-//                    String password = passwordEditText.getText().toString();
-//                    UsersApi usersApi = new UsersApi();
-//                    usersApi.getInvoker().setUsername("admin");
-//                    usersApi.getInvoker().setPassword("admin");
-//                    User newUser = new User();
-//                    newUser.setUsername(username);
-//                    newUser.setPassword(password);
-//                    newUser.setEmail(email);
-//                    //newUser.setGroups();
-//                    List<URI> groups = new ArrayList<>();
-//                    newUser.setGroups(groups);
-//                    usersApi.usersCreate(newUser);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    runOnUiThread(() -> {
-//                        Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-//                    });
-//                }
-//            }).start();
-//
-//        });
+        submitButton.setOnClickListener(v -> {
+            new Thread(() -> {
+                try {
+                    UsersApi usersApi = new UsersApi();
+
+                    String username = usernameEditText.getText().toString();
+                    String password = passwordEditText.getText().toString();
+                    String email = emailEditText.getText().toString();
+
+                    User user = new User();
+                    user.setUsername(username);
+                    user.setPassword(password);
+                    user.setEmail(email);
+                    List<URI> groups = new ArrayList<>();
+                    user.setGroups(groups);
+
+                    usersApi.usersCreate(user);
+
+                    AuthApi authApi = new AuthApi();
+                    Session.setToken(authApi.authCreate(username, password, ""), this);
+
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Usuario creado correctamente", Toast.LENGTH_SHORT).show();
+                        // Solo aquí lanzamos el Intent
+                        Intent intent = new Intent(this, LogInActivity.class);
+                        startActivity(intent);
+                    });
+
+                } catch (ApiException apiException) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Error de autenticación: " + apiException, Toast.LENGTH_SHORT).show();
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Error inesperado: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+                }
+            }).start();
+        });
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.btn_submit), (v, insets) -> {

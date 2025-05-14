@@ -22,12 +22,27 @@ import android.widget.TextView;
 
 public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder> {
 
+    public interface SubtitleProvider {
+        String getSubtitle(Photo photo);
+    }
+
+    public interface OnPhotoButtonClickListener {
+        void onButtonClick(Photo photo);
+    }
+
     private final List<Photo> photoList;
     private final Context context;
+    private final String buttonText;
+    private final OnPhotoButtonClickListener buttonClickListener;
+    private final SubtitleProvider subtitleProvider;
 
-    public PhotoAdapter(Context context, List<Photo> photoList) {
+    public PhotoAdapter(Context context, List<Photo> photoList, String buttonText,
+                        SubtitleProvider subtitleProvider, OnPhotoButtonClickListener listener) {
         this.context = context;
         this.photoList = photoList;
+        this.buttonText = buttonText;
+        this.subtitleProvider = subtitleProvider;
+        this.buttonClickListener = listener;
     }
 
     @NonNull
@@ -42,13 +57,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
         Photo item = photoList.get(position);
 
         holder.title.setText(item.getName());
-        holder.subtitle.setText(item.getName());
-        holder.author.setText(item.getOwner().toString());
-        holder.button.setText(context.getString(R.string.view_details_title));
+        holder.subtitle.setText(subtitleProvider.getSubtitle(item));
+        holder.author.setText("By " + item.getOwnerName());
+        holder.button.setText(buttonText);
 
         Glide.with(context)
                 .load(item.getImage().toString())
                 .into(holder.image);
+
+        holder.button.setOnClickListener(v -> buttonClickListener.onButtonClick(item));
 
         holder.itemView.setOnClickListener(v -> {
             v.animate().scaleX(0.97f).scaleY(0.97f).setDuration(100)
