@@ -58,30 +58,9 @@ android {
 }
 
 dependencies {
-    implementation ("com.google.code.gson:gson:2.10.1")
-    implementation ("io.swagger:swagger-annotations:1.6.6")
-    implementation ("com.android.volley:volley:1.2.1")
-    implementation ("org.apache.httpcomponents:httpcore:4.4.16")
-    implementation ("org.apache.httpcomponents:httpmime:4.5.14")
-    implementation ("com.github.bumptech.glide:glide:4.16.0")
-    implementation ("com.google.android.material:material:1.11.0")
-
-
-    implementation("io.swagger:swagger-annotations:1.6.6")
-    implementation ("com.google.code.gson:gson:2.10.1")
-    implementation ("org.apache.httpcomponents:httpcore:4.4.16")
-    implementation ("org.apache.httpcomponents:httpmime:4.5.14")
-    implementation ("com.android.volley:volley:1.2.1")
-    testImplementation ("junit:junit:4.13.2")
 
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.activity)
-    implementation(libs.constraintlayout)
-    implementation(libs.lifecycle.livedata.ktx)
-    implementation(libs.lifecycle.viewmodel.ktx)
-    implementation(libs.navigation.fragment)
-    implementation(libs.navigation.ui)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
