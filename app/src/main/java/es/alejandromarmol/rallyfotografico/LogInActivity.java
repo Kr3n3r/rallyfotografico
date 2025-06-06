@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,7 +58,7 @@ public class LogInActivity extends AppCompatActivity {
                     Session.setToken(token, this);
 
                     runOnUiThread(() -> {
-                        Toast.makeText(this, "Usuario autenticado correctamente", Toast.LENGTH_SHORT).show();
+                        Utils.showNotification(this, getString(R.string.notification_succeeded_title), getString(R.string.notification_user_successfully_auth_body));
                         // Solo aquí lanzamos el Intent
                         Intent intent = new Intent(this, ContestActivity.class);
                         startActivity(intent);
@@ -67,12 +66,12 @@ public class LogInActivity extends AppCompatActivity {
 
                 } catch (ApiException apiException) {
                     runOnUiThread(() -> {
-                        Toast.makeText(this, "Error de autenticación: " + apiException.getMessage(), Toast.LENGTH_SHORT).show();
+                        Utils.showNotification(this, getString(R.string.notification_error_title), getString(R.string.notification_error_authenticating_user_body));
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
                     runOnUiThread(() -> {
-                        Toast.makeText(this, "Error inesperado: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        Utils.showNotification(this, getString(R.string.notification_error_title), getString(R.string.notification_unexpected_error_body));
                     });
                 }
             }).start();

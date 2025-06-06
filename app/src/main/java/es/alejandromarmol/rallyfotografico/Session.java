@@ -4,76 +4,70 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import client.model.AuthToken;
 import client.model.Contest;
 
 public class Session {
-    private static final String SHARED_PREFERENCES_NAME = "auth";
-    private static SharedPreferences sharedPreferences;
-    private static SharedPreferences.Editor sharedPreferencesEditor;
 
-    private static final String TOKEN_NAME = "token";
-    private static String TOKEN = "";
-    private static final String CONTEST_NAME = "contest";
-    private static String CONTEST = "";
+    private static final String SHARED_PREFERENCES_NAME = "auth";
+    private static final String TOKEN_KEY = "token";
+    private static final String CONTEST_KEY = "contest";
+
+    private static final Class<?> NO_TOKEN_ACTIVITY = LauncherActivity.class;
+
+    private static SharedPreferences getPrefs(Context context) {
+        return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+    }
 
     public static String getToken(Context context) throws Exception {
-        try{
-            sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-            TOKEN = sharedPreferences.getString(TOKEN_NAME,null);
-            if (TOKEN == null || TOKEN.equals("")) throw new Exception("No token found.");
-            return TOKEN;
-        } catch (Exception e){
-            throw new Exception(e);
+        String token = getPrefs(context).getString(TOKEN_KEY, null);
+        if (TextUtils.isEmpty(token)) {
+            throw new Exception("No token found.");
         }
+        return token;
     }
 
     public static void setToken(AuthToken token, Context context) throws Exception {
-        if (token.toString().isEmpty() || token.equals("")) throw new Exception("No token received.");
-        try{
-            sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-            sharedPreferencesEditor = sharedPreferences.edit();
-            sharedPreferencesEditor.putString(TOKEN_NAME, token.getToken());
-            sharedPreferencesEditor.apply();
-            TOKEN = token.getToken();
-        } catch (Exception e){
-            throw new Exception(e);
+        if (token == null) {
+            throw new Exception("Invalid token.");
         }
+        getPrefs(context).edit().putString(TOKEN_KEY, token.getToken()).apply();
     }
 
     public static String getContest(Context context) throws Exception {
-        try{
-            sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-            CONTEST = sharedPreferences.getString(CONTEST_NAME,null);
-            if (CONTEST == null || CONTEST.equals("")) throw new Exception("No contest found.");
-            return CONTEST;
-        } catch (Exception e){
-            throw new Exception(e);
+        String contest = getPrefs(context).getString(CONTEST_KEY, null);
+        if (TextUtils.isEmpty(contest)) {
+            throw new Exception("No contest found.");
         }
+        return contest;
     }
 
     public static void setContest(Contest contest, Context context) throws Exception {
-        if (contest.toString().isEmpty() || contest.equals("")) throw new Exception("No contest received.");
-        try{
-            sharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-            sharedPreferencesEditor = sharedPreferences.edit();
-            sharedPreferencesEditor.putString(CONTEST_NAME, contest.getId().toString());
-            sharedPreferencesEditor.apply();
-            CONTEST = getContest(context);
-        } catch (Exception e){
-            throw new Exception(e);
+        if (contest == null || TextUtils.isEmpty(contest.getId().toString())) {
+            throw new Exception("Invalid contest.");
         }
+        getPrefs(context).edit().putString(CONTEST_KEY, contest.getId().toString()).apply();
     }
 
-    public static void checkTokenAndIntent(Context context, Class<?> cls, Activity activity) throws Exception {
-        try{
-            getToken(context);
-            Intent intent = new Intent(context,cls);
-            activity.startActivity(intent);
-        } catch (Exception e){
-            throw new Exception(e);
+    public static void checkTokenAndIntent(Context context, Class<?> targetActivity, Activity currentActivity) {
+        try {
+            getToken(context); // Verifica si hay token
+            if (!currentActivity.getClass().equals(targetActivity)) {
+                Intent intent = new Intent(context, targetActivity);
+                currentActivity.startActivity(intent);
+                currentActivity.finish();
+            }
+        } catch (Exception e) {
+            // Redirige solo si no estamos ya en la NO_TOKEN_ACTIVITY
+            if (!currentActivity.getClass().equals(NO_TOKEN_ACTIVITY) &&
+                    !currentActivity.getClass().equals(SignUpActivity.class) &&
+                    !currentActivity.getClass().equals(LogInActivity.class)) {
+                Intent intent = new Intent(context, NO_TOKEN_ACTIVITY);
+                currentActivity.startActivity(intent);
+                currentActivity.finish();
+            }
         }
     }
-
 }

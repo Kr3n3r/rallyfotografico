@@ -59,17 +59,22 @@ class PhotoViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows photos to be viewed or edited.
     """
-    from django_filters.rest_framework import DjangoFilterBackend
-
+    
     queryset = Photo.objects.all().order_by('upload_date')
     serializer_class = PhotoSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    filter_backends = [DjangoFilterBackend]
     filterset_fields = ['contest']
 
+    def get_permissions(self):
+        if self.action in ['list'] :
+            return [AllowAny()]
+        elif self.action in ['create', 'update', 'partial_update', 'retrieve']:
+            return [IsAuthenticated()]
+        else:
+            return [IsAdminUser()]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+        serializer.save(owner_name=self.request.user.username)
 
     def perform_update(self, serializer, *args, **kwargs):
         UPDATE_ERROR_MSG = "You cannot update this photo because you are not the owner."
@@ -79,7 +84,7 @@ class PhotoViewSet(viewsets.ModelViewSet):
 
     def perform_destroy(self, serializer, *args, **kwargs):
         DELETE_ERROR_MSG = "You cannot delete this photo because you are not the owner."
-        if self.request.user != serializer.owner:
+        if self.request.user != serializer.owner and not self.request.user.is_staff:
             raise PermissionDenied(DELETE_ERROR_MSG)
         return super().perform_destroy(serializer)
 

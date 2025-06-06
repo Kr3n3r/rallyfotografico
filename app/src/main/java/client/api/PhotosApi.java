@@ -18,6 +18,7 @@ import client.Pair;
 
 import client.model.*;
 
+import java.io.File;
 import java.util.*;
 
 import com.android.volley.Response;
@@ -29,7 +30,9 @@ import client.model.Photo;
 import java.util.UUID;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,17 +62,17 @@ public class PhotosApi {
   }
 
   /**
-  * 
-  * API endpoint that allows photos to be viewed or edited.
-   * @param photo 
+   *
+   * API endpoint that allows photos to be viewed or edited.
+   * @param photo
    * @return Photo
-  */
+   */
   public Photo photosCreate (Photo photo) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
     Object postBody = photo;
     // verify the required parameter 'photo' is set
     if (photo == null) {
       VolleyError error = new VolleyError("Missing the required parameter 'photo' when calling photosCreate",
-        new ApiException(400, "Missing the required parameter 'photo' when calling photosCreate"));
+              new ApiException(400, "Missing the required parameter 'photo' when calling photosCreate"));
     }
 
     // create path and map variables
@@ -82,9 +85,9 @@ public class PhotosApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
     String[] contentTypes = {
-      "application/json",
-      "application/x-www-form-urlencoded",
-      "multipart/form-data"
+            "application/json",
+            "application/x-www-form-urlencoded",
+            "multipart/form-data"
     };
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
@@ -102,14 +105,14 @@ public class PhotosApi {
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, authNames);
       if (localVarResponse != null) {
-         return (Photo) ApiInvoker.deserialize(localVarResponse, "", Photo.class);
+        return (Photo) ApiInvoker.deserialize(localVarResponse, "", Photo.class);
       } else {
-         return null;
+        return null;
       }
     } catch (ApiException ex) {
-       throw ex;
+      throw ex;
     } catch (InterruptedException ex) {
-       throw ex;
+      throw ex;
     } catch (ExecutionException ex) {
       if (ex.getCause() instanceof VolleyError) {
         VolleyError volleyError = (VolleyError)ex.getCause();
@@ -123,18 +126,86 @@ public class PhotosApi {
     }
   }
 
-      /**
-   * 
+  public void photosCreateWithImage(File imageFile, Photo photo,
+                                    final Response.Listener<Photo> responseListener,
+                                    final Response.ErrorListener errorListener) {
+    String path = "/photos/";
+
+    List<Pair> queryParams = new ArrayList<>();
+    Map<String, String> headerParams = new HashMap<>();
+    Map<String, String> formParams = new HashMap<>();
+
+    String contentType = "multipart/form-data";
+    String[] authNames = new String[]{"tokenAuth"};
+
+    MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+
+    // Cuerpo de la imagen
+    builder.addBinaryBody("image", imageFile, ContentType.create("image/jpeg"), imageFile.getName());
+
+    // Campos de texto
+    builder.addTextBody("name", photo.getName(), ContentType.TEXT_PLAIN);
+    builder.addTextBody("contest", photo.getContest().toString(), ContentType.TEXT_PLAIN);
+
+    HttpEntity httpEntity = builder.build();
+    Object postBody = httpEntity;
+
+    try {
+      apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams,
+              formParams, contentType, authNames,
+              new Response.Listener<String>() {
+                @Override
+                public void onResponse(String localVarResponse) {
+                  try {
+                    Photo response = (Photo) ApiInvoker.deserialize(localVarResponse, "", Photo.class);
+                    responseListener.onResponse(response);
+                  } catch (ApiException e) {
+                    errorListener.onErrorResponse(new VolleyError(e));
+                  }
+                }
+              }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                  String errorMsg = "Unknown error";
+                  if (error.networkResponse != null && error.networkResponse.data != null) {
+                    try {
+                      String json = new String(error.networkResponse.data, "UTF-8");
+                      JSONObject jsonObj = new JSONObject(json);
+                      if (jsonObj.has("detail")) {
+                        errorMsg = jsonObj.getString("detail");
+                      } else {
+                        errorMsg = json;
+                      }
+                    } catch (Exception e) {
+                      errorMsg = "Error parsing error response: " + e.getMessage();
+                    }
+                  }
+
+                  // Puedes loguear o mostrar este mensaje
+                  System.err.println("API Error Detail: " + errorMsg);
+
+                  // Opcional: puedes crear un nuevo VolleyError con el mensaje modificado
+                  errorListener.onErrorResponse(new VolleyError(errorMsg, error));
+                }
+              });
+    } catch (ApiException e) {
+      errorListener.onErrorResponse(new VolleyError(e));
+    }
+  }
+
+
+  /**
+   *
    * API endpoint that allows photos to be viewed or edited.
-   * @param photo 
-  */
+   * @param photo
+   */
   public void photosCreate (Photo photo, final Response.Listener<Photo> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = photo;
 
     // verify the required parameter 'photo' is set
     if (photo == null) {
       VolleyError error = new VolleyError("Missing the required parameter 'photo' when calling photosCreate",
-        new ApiException(400, "Missing the required parameter 'photo' when calling photosCreate"));
+              new ApiException(400, "Missing the required parameter 'photo' when calling photosCreate"));
     }
 
     // create path and map variables
@@ -150,56 +221,56 @@ public class PhotosApi {
 
 
     String[] contentTypes = {
-      "application/json","application/x-www-form-urlencoded","multipart/form-data"
+            "application/json","application/x-www-form-urlencoded","multipart/form-data"
     };
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
     if (contentType.startsWith("multipart/form-data")) {
       // file uploading
       MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      
+
 
       HttpEntity httpEntity = localVarBuilder.build();
       postBody = httpEntity;
     } else {
       // normal form params
-          }
+    }
 
     String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "POST", queryParams, postBody, headerParams, formParams, contentType, authNames,
-        new Response.Listener<String>() {
-          @Override
-          public void onResponse(String localVarResponse) {
-            try {
-              responseListener.onResponse((Photo) ApiInvoker.deserialize(localVarResponse,  "", Photo.class));
-            } catch (ApiException exception) {
-               errorListener.onErrorResponse(new VolleyError(exception));
-            }
-          }
-      }, new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            errorListener.onErrorResponse(error);
-          }
-      });
+              new Response.Listener<String>() {
+                @Override
+                public void onResponse(String localVarResponse) {
+                  try {
+                    responseListener.onResponse((Photo) ApiInvoker.deserialize(localVarResponse,  "", Photo.class));
+                  } catch (ApiException exception) {
+                    errorListener.onErrorResponse(new VolleyError(exception));
+                  }
+                }
+              }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                  errorListener.onErrorResponse(error);
+                }
+              });
     } catch (ApiException ex) {
       errorListener.onErrorResponse(new VolleyError(ex));
     }
   }
   /**
-  * 
-  * API endpoint that allows photos to be viewed or edited.
+   *
+   * API endpoint that allows photos to be viewed or edited.
    * @param id A UUID string identifying this photo.
    * @return void
-  */
+   */
   public void photosDestroy (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
     Object postBody = null;
     // verify the required parameter 'id' is set
     if (id == null) {
       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling photosDestroy",
-        new ApiException(400, "Missing the required parameter 'id' when calling photosDestroy"));
+              new ApiException(400, "Missing the required parameter 'id' when calling photosDestroy"));
     }
 
     // create path and map variables
@@ -229,14 +300,14 @@ public class PhotosApi {
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType, authNames);
       if (localVarResponse != null) {
-         return ;
+        return ;
       } else {
-         return ;
+        return ;
       }
     } catch (ApiException ex) {
-       throw ex;
+      throw ex;
     } catch (InterruptedException ex) {
-       throw ex;
+      throw ex;
     } catch (ExecutionException ex) {
       if (ex.getCause() instanceof VolleyError) {
         VolleyError volleyError = (VolleyError)ex.getCause();
@@ -250,18 +321,18 @@ public class PhotosApi {
     }
   }
 
-      /**
-   * 
+  /**
+   *
    * API endpoint that allows photos to be viewed or edited.
    * @param id A UUID string identifying this photo.
-  */
+   */
   public void photosDestroy (UUID id, final Response.Listener<String> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
     // verify the required parameter 'id' is set
     if (id == null) {
       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling photosDestroy",
-        new ApiException(400, "Missing the required parameter 'id' when calling photosDestroy"));
+              new ApiException(400, "Missing the required parameter 'id' when calling photosDestroy"));
     }
 
     // create path and map variables
@@ -277,46 +348,46 @@ public class PhotosApi {
 
 
     String[] contentTypes = {
-      
+
     };
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
     if (contentType.startsWith("multipart/form-data")) {
       // file uploading
       MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      
+
 
       HttpEntity httpEntity = localVarBuilder.build();
       postBody = httpEntity;
     } else {
       // normal form params
-          }
+    }
 
     String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "DELETE", queryParams, postBody, headerParams, formParams, contentType, authNames,
-        new Response.Listener<String>() {
-          @Override
-          public void onResponse(String localVarResponse) {
-              responseListener.onResponse(localVarResponse);
-          }
-      }, new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            errorListener.onErrorResponse(error);
-          }
-      });
+              new Response.Listener<String>() {
+                @Override
+                public void onResponse(String localVarResponse) {
+                  responseListener.onResponse(localVarResponse);
+                }
+              }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                  errorListener.onErrorResponse(error);
+                }
+              });
     } catch (ApiException ex) {
       errorListener.onErrorResponse(new VolleyError(ex));
     }
   }
   /**
-  * 
-  * API endpoint that allows photos to be viewed or edited.
-   * @param contest 
+   *
+   * API endpoint that allows photos to be viewed or edited.
+   * @param contest
    * @return List<Photo>
-  */
+   */
   public List<Photo> photosList (UUID contest) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
     Object postBody = null;
 
@@ -348,14 +419,14 @@ public class PhotosApi {
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
       if (localVarResponse != null) {
-         return (List<Photo>) ApiInvoker.deserialize(localVarResponse, "array", Photo.class);
+        return (List<Photo>) ApiInvoker.deserialize(localVarResponse, "array", Photo.class);
       } else {
-         return null;
+        return null;
       }
     } catch (ApiException ex) {
-       throw ex;
+      throw ex;
     } catch (InterruptedException ex) {
-       throw ex;
+      throw ex;
     } catch (ExecutionException ex) {
       if (ex.getCause() instanceof VolleyError) {
         VolleyError volleyError = (VolleyError)ex.getCause();
@@ -369,11 +440,11 @@ public class PhotosApi {
     }
   }
 
-      /**
-   * 
+  /**
+   *
    * API endpoint that allows photos to be viewed or edited.
-   * @param contest 
-  */
+   * @param contest
+   */
   public void photosList (UUID contest, final Response.Listener<List<Photo>> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
@@ -392,57 +463,57 @@ public class PhotosApi {
 
 
     String[] contentTypes = {
-      
+
     };
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
     if (contentType.startsWith("multipart/form-data")) {
       // file uploading
       MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      
+
 
       HttpEntity httpEntity = localVarBuilder.build();
       postBody = httpEntity;
     } else {
       // normal form params
-          }
+    }
 
     String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
-        new Response.Listener<String>() {
-          @Override
-          public void onResponse(String localVarResponse) {
-            try {
-              responseListener.onResponse((List<Photo>) ApiInvoker.deserialize(localVarResponse,  "array", Photo.class));
-            } catch (ApiException exception) {
-               errorListener.onErrorResponse(new VolleyError(exception));
-            }
-          }
-      }, new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            errorListener.onErrorResponse(error);
-          }
-      });
+              new Response.Listener<String>() {
+                @Override
+                public void onResponse(String localVarResponse) {
+                  try {
+                    responseListener.onResponse((List<Photo>) ApiInvoker.deserialize(localVarResponse,  "array", Photo.class));
+                  } catch (ApiException exception) {
+                    errorListener.onErrorResponse(new VolleyError(exception));
+                  }
+                }
+              }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                  errorListener.onErrorResponse(error);
+                }
+              });
     } catch (ApiException ex) {
       errorListener.onErrorResponse(new VolleyError(ex));
     }
   }
   /**
-  * 
-  * API endpoint that allows photos to be viewed or edited.
+   *
+   * API endpoint that allows photos to be viewed or edited.
    * @param id A UUID string identifying this photo.
-   * @param patchedPhoto 
+   * @param patchedPhoto
    * @return Photo
-  */
+   */
   public Photo photosPartialUpdate (UUID id, PatchedPhoto patchedPhoto) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
     Object postBody = patchedPhoto;
     // verify the required parameter 'id' is set
     if (id == null) {
       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling photosPartialUpdate",
-        new ApiException(400, "Missing the required parameter 'id' when calling photosPartialUpdate"));
+              new ApiException(400, "Missing the required parameter 'id' when calling photosPartialUpdate"));
     }
 
     // create path and map variables
@@ -455,9 +526,9 @@ public class PhotosApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
     String[] contentTypes = {
-      "application/json",
-      "application/x-www-form-urlencoded",
-      "multipart/form-data"
+            "application/json",
+            "application/x-www-form-urlencoded",
+            "multipart/form-data"
     };
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
@@ -475,14 +546,14 @@ public class PhotosApi {
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "PATCH", queryParams, postBody, headerParams, formParams, contentType, authNames);
       if (localVarResponse != null) {
-         return (Photo) ApiInvoker.deserialize(localVarResponse, "", Photo.class);
+        return (Photo) ApiInvoker.deserialize(localVarResponse, "", Photo.class);
       } else {
-         return null;
+        return null;
       }
     } catch (ApiException ex) {
-       throw ex;
+      throw ex;
     } catch (InterruptedException ex) {
-       throw ex;
+      throw ex;
     } catch (ExecutionException ex) {
       if (ex.getCause() instanceof VolleyError) {
         VolleyError volleyError = (VolleyError)ex.getCause();
@@ -496,18 +567,18 @@ public class PhotosApi {
     }
   }
 
-      /**
-   * 
+  /**
+   *
    * API endpoint that allows photos to be viewed or edited.
    * @param id A UUID string identifying this photo.   * @param patchedPhoto 
-  */
+   */
   public void photosPartialUpdate (UUID id, PatchedPhoto patchedPhoto, final Response.Listener<Photo> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = patchedPhoto;
 
     // verify the required parameter 'id' is set
     if (id == null) {
       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling photosPartialUpdate",
-        new ApiException(400, "Missing the required parameter 'id' when calling photosPartialUpdate"));
+              new ApiException(400, "Missing the required parameter 'id' when calling photosPartialUpdate"));
     }
 
     // create path and map variables
@@ -523,56 +594,56 @@ public class PhotosApi {
 
 
     String[] contentTypes = {
-      "application/json","application/x-www-form-urlencoded","multipart/form-data"
+            "application/json","application/x-www-form-urlencoded","multipart/form-data"
     };
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
     if (contentType.startsWith("multipart/form-data")) {
       // file uploading
       MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      
+
 
       HttpEntity httpEntity = localVarBuilder.build();
       postBody = httpEntity;
     } else {
       // normal form params
-          }
+    }
 
     String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "PATCH", queryParams, postBody, headerParams, formParams, contentType, authNames,
-        new Response.Listener<String>() {
-          @Override
-          public void onResponse(String localVarResponse) {
-            try {
-              responseListener.onResponse((Photo) ApiInvoker.deserialize(localVarResponse,  "", Photo.class));
-            } catch (ApiException exception) {
-               errorListener.onErrorResponse(new VolleyError(exception));
-            }
-          }
-      }, new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            errorListener.onErrorResponse(error);
-          }
-      });
+              new Response.Listener<String>() {
+                @Override
+                public void onResponse(String localVarResponse) {
+                  try {
+                    responseListener.onResponse((Photo) ApiInvoker.deserialize(localVarResponse,  "", Photo.class));
+                  } catch (ApiException exception) {
+                    errorListener.onErrorResponse(new VolleyError(exception));
+                  }
+                }
+              }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                  errorListener.onErrorResponse(error);
+                }
+              });
     } catch (ApiException ex) {
       errorListener.onErrorResponse(new VolleyError(ex));
     }
   }
   /**
-  * 
-  * API endpoint that allows photos to be viewed or edited.
+   *
+   * API endpoint that allows photos to be viewed or edited.
    * @param id A UUID string identifying this photo.
    * @return Photo
-  */
+   */
   public Photo photosRetrieve (UUID id) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
     Object postBody = null;
     // verify the required parameter 'id' is set
     if (id == null) {
       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling photosRetrieve",
-        new ApiException(400, "Missing the required parameter 'id' when calling photosRetrieve"));
+              new ApiException(400, "Missing the required parameter 'id' when calling photosRetrieve"));
     }
 
     // create path and map variables
@@ -602,14 +673,14 @@ public class PhotosApi {
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames);
       if (localVarResponse != null) {
-         return (Photo) ApiInvoker.deserialize(localVarResponse, "", Photo.class);
+        return (Photo) ApiInvoker.deserialize(localVarResponse, "", Photo.class);
       } else {
-         return null;
+        return null;
       }
     } catch (ApiException ex) {
-       throw ex;
+      throw ex;
     } catch (InterruptedException ex) {
-       throw ex;
+      throw ex;
     } catch (ExecutionException ex) {
       if (ex.getCause() instanceof VolleyError) {
         VolleyError volleyError = (VolleyError)ex.getCause();
@@ -623,18 +694,18 @@ public class PhotosApi {
     }
   }
 
-      /**
-   * 
+  /**
+   *
    * API endpoint that allows photos to be viewed or edited.
    * @param id A UUID string identifying this photo.
-  */
+   */
   public void photosRetrieve (UUID id, final Response.Listener<Photo> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = null;
 
     // verify the required parameter 'id' is set
     if (id == null) {
       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling photosRetrieve",
-        new ApiException(400, "Missing the required parameter 'id' when calling photosRetrieve"));
+              new ApiException(400, "Missing the required parameter 'id' when calling photosRetrieve"));
     }
 
     // create path and map variables
@@ -650,62 +721,62 @@ public class PhotosApi {
 
 
     String[] contentTypes = {
-      
+
     };
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
     if (contentType.startsWith("multipart/form-data")) {
       // file uploading
       MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      
+
 
       HttpEntity httpEntity = localVarBuilder.build();
       postBody = httpEntity;
     } else {
       // normal form params
-          }
+    }
 
     String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "GET", queryParams, postBody, headerParams, formParams, contentType, authNames,
-        new Response.Listener<String>() {
-          @Override
-          public void onResponse(String localVarResponse) {
-            try {
-              responseListener.onResponse((Photo) ApiInvoker.deserialize(localVarResponse,  "", Photo.class));
-            } catch (ApiException exception) {
-               errorListener.onErrorResponse(new VolleyError(exception));
-            }
-          }
-      }, new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            errorListener.onErrorResponse(error);
-          }
-      });
+              new Response.Listener<String>() {
+                @Override
+                public void onResponse(String localVarResponse) {
+                  try {
+                    responseListener.onResponse((Photo) ApiInvoker.deserialize(localVarResponse,  "", Photo.class));
+                  } catch (ApiException exception) {
+                    errorListener.onErrorResponse(new VolleyError(exception));
+                  }
+                }
+              }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                  errorListener.onErrorResponse(error);
+                }
+              });
     } catch (ApiException ex) {
       errorListener.onErrorResponse(new VolleyError(ex));
     }
   }
   /**
-  * 
-  * API endpoint that allows photos to be viewed or edited.
+   *
+   * API endpoint that allows photos to be viewed or edited.
    * @param id A UUID string identifying this photo.
-   * @param photo 
+   * @param photo
    * @return Photo
-  */
+   */
   public Photo photosUpdate (UUID id, Photo photo) throws TimeoutException, ExecutionException, InterruptedException, ApiException {
     Object postBody = photo;
     // verify the required parameter 'id' is set
     if (id == null) {
       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling photosUpdate",
-        new ApiException(400, "Missing the required parameter 'id' when calling photosUpdate"));
+              new ApiException(400, "Missing the required parameter 'id' when calling photosUpdate"));
     }
     // verify the required parameter 'photo' is set
     if (photo == null) {
       VolleyError error = new VolleyError("Missing the required parameter 'photo' when calling photosUpdate",
-        new ApiException(400, "Missing the required parameter 'photo' when calling photosUpdate"));
+              new ApiException(400, "Missing the required parameter 'photo' when calling photosUpdate"));
     }
 
     // create path and map variables
@@ -718,9 +789,9 @@ public class PhotosApi {
     // form params
     Map<String, String> formParams = new HashMap<String, String>();
     String[] contentTypes = {
-      "application/json",
-      "application/x-www-form-urlencoded",
-      "multipart/form-data"
+            "application/json",
+            "application/x-www-form-urlencoded",
+            "multipart/form-data"
     };
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
@@ -738,14 +809,14 @@ public class PhotosApi {
     try {
       String localVarResponse = apiInvoker.invokeAPI (basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType, authNames);
       if (localVarResponse != null) {
-         return (Photo) ApiInvoker.deserialize(localVarResponse, "", Photo.class);
+        return (Photo) ApiInvoker.deserialize(localVarResponse, "", Photo.class);
       } else {
-         return null;
+        return null;
       }
     } catch (ApiException ex) {
-       throw ex;
+      throw ex;
     } catch (InterruptedException ex) {
-       throw ex;
+      throw ex;
     } catch (ExecutionException ex) {
       if (ex.getCause() instanceof VolleyError) {
         VolleyError volleyError = (VolleyError)ex.getCause();
@@ -759,23 +830,23 @@ public class PhotosApi {
     }
   }
 
-      /**
-   * 
+  /**
+   *
    * API endpoint that allows photos to be viewed or edited.
    * @param id A UUID string identifying this photo.   * @param photo 
-  */
+   */
   public void photosUpdate (UUID id, Photo photo, final Response.Listener<Photo> responseListener, final Response.ErrorListener errorListener) {
     Object postBody = photo;
 
     // verify the required parameter 'id' is set
     if (id == null) {
       VolleyError error = new VolleyError("Missing the required parameter 'id' when calling photosUpdate",
-        new ApiException(400, "Missing the required parameter 'id' when calling photosUpdate"));
+              new ApiException(400, "Missing the required parameter 'id' when calling photosUpdate"));
     }
     // verify the required parameter 'photo' is set
     if (photo == null) {
       VolleyError error = new VolleyError("Missing the required parameter 'photo' when calling photosUpdate",
-        new ApiException(400, "Missing the required parameter 'photo' when calling photosUpdate"));
+              new ApiException(400, "Missing the required parameter 'photo' when calling photosUpdate"));
     }
 
     // create path and map variables
@@ -791,40 +862,40 @@ public class PhotosApi {
 
 
     String[] contentTypes = {
-      "application/json","application/x-www-form-urlencoded","multipart/form-data"
+            "application/json","application/x-www-form-urlencoded","multipart/form-data"
     };
     String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
 
     if (contentType.startsWith("multipart/form-data")) {
       // file uploading
       MultipartEntityBuilder localVarBuilder = MultipartEntityBuilder.create();
-      
+
 
       HttpEntity httpEntity = localVarBuilder.build();
       postBody = httpEntity;
     } else {
       // normal form params
-          }
+    }
 
     String[] authNames = new String[] { "tokenAuth" };
 
     try {
       apiInvoker.invokeAPI(basePath, path, "PUT", queryParams, postBody, headerParams, formParams, contentType, authNames,
-        new Response.Listener<String>() {
-          @Override
-          public void onResponse(String localVarResponse) {
-            try {
-              responseListener.onResponse((Photo) ApiInvoker.deserialize(localVarResponse,  "", Photo.class));
-            } catch (ApiException exception) {
-               errorListener.onErrorResponse(new VolleyError(exception));
-            }
-          }
-      }, new Response.ErrorListener() {
-          @Override
-          public void onErrorResponse(VolleyError error) {
-            errorListener.onErrorResponse(error);
-          }
-      });
+              new Response.Listener<String>() {
+                @Override
+                public void onResponse(String localVarResponse) {
+                  try {
+                    responseListener.onResponse((Photo) ApiInvoker.deserialize(localVarResponse,  "", Photo.class));
+                  } catch (ApiException exception) {
+                    errorListener.onErrorResponse(new VolleyError(exception));
+                  }
+                }
+              }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                  errorListener.onErrorResponse(error);
+                }
+              });
     } catch (ApiException ex) {
       errorListener.onErrorResponse(new VolleyError(ex));
     }

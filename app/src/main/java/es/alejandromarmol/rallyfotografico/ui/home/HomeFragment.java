@@ -35,6 +35,7 @@ import client.model.User;
 import client.model.Vote;
 import es.alejandromarmol.rallyfotografico.R;
 import es.alejandromarmol.rallyfotografico.Session;
+import es.alejandromarmol.rallyfotografico.Utils;
 import es.alejandromarmol.rallyfotografico.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
@@ -61,7 +62,24 @@ public class HomeFragment extends Fragment {
         binding.recyclerPhotos.addItemDecoration(new VerticalSpacingItemDecoration(24));
 
         // Load contest from API
-        loadContest();
+        Utils.loadContest(this, new Utils.ContestCallback() {
+            @Override
+            public void onContestLoaded(Contest contest){
+                loadContestName(contest);
+                loadSubmissionDeadline(contest);
+                loadVotingDeadline(contest);
+                countdownTextView = binding.tvCountdown;
+                String date = contest.getEndDate().toString();
+                startCountdownTo(date);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Utils.showNotification(getContext(), getString(R.string.notification_error_title), getString(R.string.notification_error_getting_contest));
+            }
+        });
+
+        Utils.loadPhotos(this, adapter, photoList);
 
         return root;
     }
@@ -107,68 +125,13 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void loadPhotos() {
-        new Thread(() -> {
-            try {
-                PhotosApi photosApi = new PhotosApi();
-                photosApi.getInvoker().setApiKey(Session.getToken(this.getContext()));
-                List<Photo> responsePhotos = photosApi.photosList(contest.getId());
-
-
-                // Actualizamos la lista y la UI desde el hilo principal
-                requireActivity().runOnUiThread(() -> {
-                    photoList.clear();
-                    photoList.addAll(responsePhotos);
-                    adapter.notifyDataSetChanged();
-                    Toast.makeText(getContext(), "Fotos cargadas correctamente", Toast.LENGTH_SHORT).show();
-                    Log.d("INFO", "All the photos extracted");
-                });
-
-            } catch (Exception e) {
-                Log.e("API_ERROR", "Error al obtener las fotos", e);
-                requireActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Error al cargar las fotos", Toast.LENGTH_SHORT).show()
-                );
-            }
-        }).start();
-    }
-
-    private void loadContest(){
-        new Thread(() -> {
-            try {
-                ContestsApi contestsApi = new ContestsApi();
-                contestsApi.getInvoker().setApiKey(Session.getToken(this.getContext()));
-                this.contest = contestsApi.contestsList().get(0);
-                Session.setContest(contest, this.getContext());
-                Log.d("INFO",contest.toString());
-
-                loadContestName();
-                loadSubmissionDeadline();
-                loadVotingDeadline();
-                loadPhotos();
-
-                requireActivity().runOnUiThread(() -> {
-                    // Configure countdown
-                    countdownTextView = binding.tvCountdown;
-                    String date = contest.getEndDate().toString();
-                    startCountdownTo(date);
-                });
-            } catch (Exception e) {
-                Log.e("API_ERROR", "Error getting contest", e);
-                requireActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Error getting contest", Toast.LENGTH_SHORT).show()
-                );
-            }
-        }).start();
-    }
-
-    private void loadSubmissionDeadline() {
+    private void loadSubmissionDeadline(Contest contest) {
         new Thread(() -> {
             try {
                 // Actualizamos la lista y la UI desde el hilo principal
                 requireActivity().runOnUiThread(() -> {
                     this.submissionDeadline="";
-                    submissionDeadline = this.contest.getEndDate().toString();
+                    submissionDeadline = contest.getEndDate().toString();
                     binding.submissionDeadline.setText(this.submissionDeadline);
                     adapter.notifyDataSetChanged();
                     Log.d("INFO", "Submission deadline setted correctly");
@@ -177,18 +140,18 @@ public class HomeFragment extends Fragment {
             } catch (Exception e) {
                 Log.e("ERROR", "Error getting contest deadline", e);
                 requireActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Error getting contest deadline", Toast.LENGTH_SHORT).show()
+                        Utils.showNotification(getContext(), getContext().getString(R.string.notification_error_title), getContext().getString(R.string.notification_error_getting_contest_deadline))
                 );
             }
         }).start();
     }
 
-    private void loadVotingDeadline() {
+    private void loadVotingDeadline(Contest contest) {
         new Thread(() -> {
             try {
                 requireActivity().runOnUiThread(() -> {
                     this.votingDeadline="";
-                    votingDeadline = this.contest.getVotingEndDate().toString();
+                    votingDeadline = contest.getVotingEndDate().toString();
                     binding.votingDeadline.setText(this.votingDeadline);
                     adapter.notifyDataSetChanged();
                     Log.d("INFO", "Submission voting deadline setted correctly");
@@ -197,18 +160,18 @@ public class HomeFragment extends Fragment {
             } catch (Exception e) {
                 Log.e("ERROR", "Error getting voting deadline", e);
                 requireActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Error getting voting deadline", Toast.LENGTH_SHORT).show()
+                        Utils.showNotification(getContext(), getContext().getString(R.string.notification_error_title), getContext().getString(R.string.notification_error_getting_voting_deadline))
                 );
             }
         }).start();
     }
 
-    private void loadContestName() {
+    private void loadContestName(Contest contest) {
         new Thread(() -> {
             try {
                 requireActivity().runOnUiThread(() -> {
                     this.contestName="";
-                    contestName = this.contest.getName().toString();
+                    contestName = contest.getName().toString();
                     binding.tvContestTitle.setText(this.contestName);
                     adapter.notifyDataSetChanged();
                     Log.d("INFO", "Contest name setted correctly");
@@ -217,7 +180,7 @@ public class HomeFragment extends Fragment {
             } catch (Exception e) {
                 Log.e("ERROR", "Error getting Contest name", e);
                 requireActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Error getting Contest name", Toast.LENGTH_SHORT).show()
+                        Utils.showNotification(getContext(), getContext().getString(R.string.notification_error_title), getContext().getString(R.string.notification_error_getting_contest_name))
                 );
             }
         }).start();

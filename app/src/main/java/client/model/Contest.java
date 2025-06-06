@@ -139,19 +139,24 @@ public class Contest {
     return result;
   }
 
+//  @Override
+//  public String toString()  {
+//    StringBuilder sb = new StringBuilder();
+//    sb.append("class Contest {\n");
+//
+//    sb.append("  id: ").append(id).append("\n");
+//    sb.append("  name: ").append(name).append("\n");
+//    sb.append("  startDate: ").append(startDate).append("\n");
+//    sb.append("  endDate: ").append(endDate).append("\n");
+//    sb.append("  votingStartDate: ").append(votingStartDate).append("\n");
+//    sb.append("  votingEndDate: ").append(votingEndDate).append("\n");
+//    sb.append("  maxPhotosPerUser: ").append(maxPhotosPerUser).append("\n");
+//    sb.append("}\n");
+//    return sb.toString();
+//  }
+
   @Override
-  public String toString()  {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class Contest {\n");
-    
-    sb.append("  id: ").append(id).append("\n");
-    sb.append("  name: ").append(name).append("\n");
-    sb.append("  startDate: ").append(startDate).append("\n");
-    sb.append("  endDate: ").append(endDate).append("\n");
-    sb.append("  votingStartDate: ").append(votingStartDate).append("\n");
-    sb.append("  votingEndDate: ").append(votingEndDate).append("\n");
-    sb.append("  maxPhotosPerUser: ").append(maxPhotosPerUser).append("\n");
-    sb.append("}\n");
-    return sb.toString();
+  public String toString() {
+    return name;
   }
 }
