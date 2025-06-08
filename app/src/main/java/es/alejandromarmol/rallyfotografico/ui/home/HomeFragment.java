@@ -75,7 +75,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onError(Exception e) {
-                Utils.showMessage(getContext(), getString(R.string.notification_error_getting_contest), true);
+                Utils.showMessage(getContext(), getString(R.string.notification_error_getting_contest), Utils.MessageType.ERROR);
             }
         });
 
@@ -140,7 +140,7 @@ public class HomeFragment extends Fragment {
             } catch (Exception e) {
                 Log.e("ERROR", "Error getting contest deadline", e);
                 requireActivity().runOnUiThread(() ->
-                        Utils.showMessage(getContext(), getContext().getString(R.string.notification_error_getting_contest_deadline), true)
+                        Utils.showMessage(getContext(), getContext().getString(R.string.notification_error_getting_contest_deadline), Utils.MessageType.ERROR)
                 );
             }
         }).start();
@@ -160,7 +160,7 @@ public class HomeFragment extends Fragment {
             } catch (Exception e) {
                 Log.e("ERROR", "Error getting voting deadline", e);
                 requireActivity().runOnUiThread(() ->
-                        Utils.showMessage( getContext(), getContext().getString(R.string.notification_error_getting_voting_deadline), true)
+                        Utils.showMessage( getContext(), getContext().getString(R.string.notification_error_getting_voting_deadline), Utils.MessageType.ERROR)
                 );
             }
         }).start();
@@ -180,7 +180,7 @@ public class HomeFragment extends Fragment {
             } catch (Exception e) {
                 Log.e("ERROR", "Error getting Contest name", e);
                 requireActivity().runOnUiThread(() ->
-                        Utils.showMessage(getContext(), getContext().getString(R.string.notification_error_getting_contest_name), true)
+                        Utils.showMessage(getContext(), getContext().getString(R.string.notification_error_getting_contest_name), Utils.MessageType.ERROR)
                 );
             }
         }).start();

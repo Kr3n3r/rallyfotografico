@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ public class LogInActivity extends AppCompatActivity {
         TextView registerLink = findViewById(R.id.tv_login_link);
         EditText usernameEditText = findViewById(R.id.et_fullname);
         EditText passwordEditText = findViewById(R.id.et_password);
+        CheckBox termsCheckBox = findViewById(R.id.cb_terms);
 
         try {
             Session.checkTokenAndIntent(this, ContestActivity.class,this);
@@ -49,6 +51,10 @@ public class LogInActivity extends AppCompatActivity {
         });
 
         submitButton.setOnClickListener(v -> {
+            if (!termsCheckBox.isChecked()) {
+                Utils.showMessage(this, getString(R.string.terms_not_accepted_error), Utils.MessageType.WARN);
+                return;
+            }
             new Thread(() -> {
                 try {
                     String username = usernameEditText.getText().toString();
@@ -60,7 +66,7 @@ public class LogInActivity extends AppCompatActivity {
                     Session.setToken(token, this);
 
                     runOnUiThread(() -> {
-                        Utils.showMessage(this, getString(R.string.notification_user_successfully_auth_body), false);
+                        Utils.showMessage(this, getString(R.string.notification_user_successfully_auth_body), Utils.MessageType.ERROR);
                         // Solo aquí lanzamos el Intent
                         Intent intent = new Intent(this, ContestActivity.class);
                         startActivity(intent);
@@ -68,12 +74,12 @@ public class LogInActivity extends AppCompatActivity {
 
                 } catch (ApiException apiException) {
                     runOnUiThread(() -> {
-                        Utils.showMessage(this, getString(R.string.notification_error_authenticating_user_body), true);
+                        Utils.showMessage(this, getString(R.string.notification_error_authenticating_user_body), Utils.MessageType.ERROR);
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
                     runOnUiThread(() -> {
-                        Utils.showMessage(this, getString(R.string.notification_unexpected_error_body), true);
+                        Utils.showMessage(this, getString(R.string.notification_unexpected_error_body), Utils.MessageType.WARN);
                     });
                 }
             }).start();

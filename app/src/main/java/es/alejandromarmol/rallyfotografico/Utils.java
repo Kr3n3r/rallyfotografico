@@ -7,7 +7,10 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -48,7 +51,7 @@ public class Utils {
             } catch (Exception e) {
                 Log.e("API_ERROR", "Error al obtener las fotos", e);
                 fragment.requireActivity().runOnUiThread(() ->
-                        Utils.showMessage(fragment.getContext(), fragment.getContext().getString(R.string.notification_error_getting_photos), true)
+                        Utils.showMessage(fragment.getContext(), fragment.getContext().getString(R.string.notification_error_getting_photos), MessageType.ERROR)
                 );
             }
         }).start();
@@ -134,13 +137,105 @@ public class Utils {
         }).start();
     }
 
+    public enum MessageType {
+        ERROR, WARN, INFO, OK
+    }
+    public static void showMessage(Context context, String message, MessageType messageType) {
+        switch (messageType) {
+            case OK:
+                Toasty.success(context, message, Toast.LENGTH_SHORT, true).show();
+                break;
+            case ERROR:
+                Toasty.error(context, message, Toast.LENGTH_SHORT, true).show();
+                break;
+            case WARN:
+                Toasty.warning(context, message, Toast.LENGTH_SHORT, true).show();
+                break;
+            case INFO:
+                Toasty.info(context, message, Toast.LENGTH_SHORT, true).show();
+                break;
 
-    public static void showMessage(Context context, String message, boolean isError) {
-        if (isError) {
-            Toasty.error(context, message, Toast.LENGTH_SHORT, true).show();
-        } else {
-            Toasty.success(context, message, Toast.LENGTH_SHORT, true).show();
         }
+    }
+
+    public static void setupPasswordCheck(Context context, EditText passwordEditText) {
+        Handler debounceHandler = new Handler(Looper.getMainLooper());
+        final long DEBOUNCE_DELAY = 500; // miliseconds
+
+        // Variable que necesita ser final (pero mutable)
+        final Runnable[] debounceRunnable = new Runnable[1];
+
+        passwordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (debounceRunnable[0] != null) {
+                    debounceHandler.removeCallbacks(debounceRunnable[0]);
+                }
+
+                debounceRunnable[0] = () -> {
+                    String password = s.toString().trim();
+                    if (!password.isEmpty()) {
+                        Utils.passwordIsValid(password, isValid -> {
+                            if (!isValid) {
+                                passwordEditText.setError(context.getString(R.string.password_edit_text_error));
+                            } else {
+                                passwordEditText.setError(null);
+                            }
+                        });
+                    } else {
+                        passwordEditText.setError(null); // Limpiar si está vacío
+                    }
+                };
+
+                debounceHandler.postDelayed(debounceRunnable[0], DEBOUNCE_DELAY);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    public static void setupUserCheck(Context context, EditText usernameEditText) {
+        Handler debounceHandler = new Handler(Looper.getMainLooper());
+        final long DEBOUNCE_DELAY = 500; // miliseconds
+
+        // Variable que necesita ser final (pero mutable)
+        final Runnable[] debounceRunnable = new Runnable[1];
+
+        usernameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (debounceRunnable[0] != null) {
+                    debounceHandler.removeCallbacks(debounceRunnable[0]);
+                }
+
+                debounceRunnable[0] = () -> {
+                    String username = s.toString().trim();
+                    if (!username.isEmpty()) {
+                        Utils.userExists(username, exists -> {
+                            if (exists) {
+                                usernameEditText.setError(context.getString(R.string.username_edit_text_error));
+                            } else {
+                                usernameEditText.setError(null);
+                            }
+                        });
+                    } else {
+                        usernameEditText.setError(null); // Limpiar si está vacío
+                    }
+                };
+
+                debounceHandler.postDelayed(debounceRunnable[0], DEBOUNCE_DELAY);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
     }
 
 

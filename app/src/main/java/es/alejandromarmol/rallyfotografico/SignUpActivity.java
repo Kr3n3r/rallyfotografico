@@ -36,30 +36,26 @@ public class SignUpActivity extends AppCompatActivity {
     EditText emailEditText;
     EditText passwordEditText;
     CheckBox checkBox;
-    private Handler debounceHandler = new Handler(Looper.getMainLooper());
-    private Runnable debounceRunnable;
-    private static final long DEBOUNCE_DELAY = 500; // milisegundos
-    private static final int REQUEST_NOTIFICATION_PERMISSION = 1;
 
-    private void requestNotificationPermissionIfNeeded() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                        this,
-                        new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
-                        REQUEST_NOTIFICATION_PERMISSION
-                );
-            }
-        }
-    }
+//    private void requestNotificationPermissionIfNeeded() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+//                    != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(
+//                        this,
+//                        new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
+//                        REQUEST_NOTIFICATION_PERMISSION
+//                );
+//            }
+//        }
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
-        requestNotificationPermissionIfNeeded();
+//        requestNotificationPermissionIfNeeded();
 
         Button submitButton = findViewById(R.id.btn_submit);
         TextView loginLink = findViewById(R.id.tv_login_link);
@@ -84,8 +80,8 @@ public class SignUpActivity extends AppCompatActivity {
             if (validateInputs(checkBox)) signUp();
         });
 
-        setupUsernameCheck(usernameEditText);
-        setupPasswordCheck(passwordEditText);
+        Utils.setupUserCheck(this, usernameEditText);
+        Utils.setupPasswordCheck(this, passwordEditText);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.btn_submit), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -128,7 +124,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         if (!checkBox.isChecked()) {
-            Utils.showMessage(this, getString(R.string.terms_not_accepted_error), true);
+            Utils.showMessage(this, getString(R.string.terms_not_accepted_error), Utils.MessageType.WARN);
             return false;
         }
 
@@ -157,7 +153,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Session.setToken(authApi.authCreate(username, password, ""), this);
 
                 runOnUiThread(() -> {
-                    Utils.showMessage(this, getString(R.string.notification_user_created_body), false);
+                    Utils.showMessage(this, getString(R.string.notification_user_created_body), Utils.MessageType.OK);
                     // Solo aquí lanzamos el Intent
                     Intent intent = new Intent(this, LogInActivity.class);
                     startActivity(intent);
@@ -165,87 +161,15 @@ public class SignUpActivity extends AppCompatActivity {
 
             } catch (ApiException apiException) {
                 runOnUiThread(() -> {
-                    Utils.showMessage(this, getString(R.string.notification_error_creating_user_body), true);
+                    Utils.showMessage(this, getString(R.string.notification_error_creating_user_body), Utils.MessageType.ERROR);
                 });
             } catch (Exception e) {
                 e.printStackTrace();
                 runOnUiThread(() -> {
-                    Utils.showMessage(this, getString(R.string.notification_unexpected_error_body), true);
+                    Utils.showMessage(this, getString(R.string.notification_unexpected_error_body), Utils.MessageType.WARN);
                 });
 
             }
         }).start();
-    }
-
-    private void setupUsernameCheck(EditText usernameEditText) {
-        usernameEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (debounceRunnable != null) {
-                    debounceHandler.removeCallbacks(debounceRunnable);
-                }
-
-                debounceRunnable = () -> {
-                    String username = s.toString().trim();
-                    if (!username.isEmpty()) {
-                        Utils.userExists(username, exists -> {
-                            if (exists) {
-                                usernameEditText.setError(getString(R.string.username_edit_text_error));
-//                                usernameEditText.setBackgroundResource(R.drawable.edit_text_error_background);
-                            } else {
-                                usernameEditText.setError(null);
-//                                usernameEditText.setBackgroundResource(R.drawable.edit_text_normal_background);
-                            }
-                        });
-                    }
-                };
-
-                debounceHandler.postDelayed(debounceRunnable, DEBOUNCE_DELAY);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // Este método es obligatorio, aunque no se use
-            }
-        });
-    }
-
-    private void setupPasswordCheck(EditText passwordEditText) {
-        passwordEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (debounceRunnable != null) {
-                    debounceHandler.removeCallbacks(debounceRunnable);
-                }
-
-                debounceRunnable = () -> {
-                    String password = s.toString().trim();
-                    if (!password.isEmpty()) {
-                        Utils.passwordIsValid(password, isValid -> {
-                            if (!isValid) {
-                                passwordEditText.setError(getString(R.string.password_edit_text_error));
-//                                usernameEditText.setBackgroundResource(R.drawable.edit_text_error_background);
-                            } else {
-                                passwordEditText.setError(null);
-//                                usernameEditText.setBackgroundResource(R.drawable.edit_text_normal_background);
-                            }
-                        });
-                    }
-                };
-
-                debounceHandler.postDelayed(debounceRunnable, DEBOUNCE_DELAY);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // Este método es obligatorio, aunque no se use
-            }
-        });
     }
 }
