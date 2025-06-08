@@ -75,7 +75,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onError(Exception e) {
-                Utils.showNotification(getContext(), getString(R.string.notification_error_title), getString(R.string.notification_error_getting_contest));
+                Utils.showMessage(getContext(), getString(R.string.notification_error_getting_contest), true);
             }
         });
 
@@ -140,7 +140,7 @@ public class HomeFragment extends Fragment {
             } catch (Exception e) {
                 Log.e("ERROR", "Error getting contest deadline", e);
                 requireActivity().runOnUiThread(() ->
-                        Utils.showNotification(getContext(), getContext().getString(R.string.notification_error_title), getContext().getString(R.string.notification_error_getting_contest_deadline))
+                        Utils.showMessage(getContext(), getContext().getString(R.string.notification_error_getting_contest_deadline), true)
                 );
             }
         }).start();
@@ -160,7 +160,7 @@ public class HomeFragment extends Fragment {
             } catch (Exception e) {
                 Log.e("ERROR", "Error getting voting deadline", e);
                 requireActivity().runOnUiThread(() ->
-                        Utils.showNotification(getContext(), getContext().getString(R.string.notification_error_title), getContext().getString(R.string.notification_error_getting_voting_deadline))
+                        Utils.showMessage( getContext(), getContext().getString(R.string.notification_error_getting_voting_deadline), true)
                 );
             }
         }).start();
@@ -180,7 +180,7 @@ public class HomeFragment extends Fragment {
             } catch (Exception e) {
                 Log.e("ERROR", "Error getting Contest name", e);
                 requireActivity().runOnUiThread(() ->
-                        Utils.showNotification(getContext(), getContext().getString(R.string.notification_error_title), getContext().getString(R.string.notification_error_getting_contest_name))
+                        Utils.showMessage(getContext(), getContext().getString(R.string.notification_error_getting_contest_name), true)
                 );
             }
         }).start();

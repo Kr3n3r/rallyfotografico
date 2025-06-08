@@ -2,6 +2,7 @@ package es.alejandromarmol.rallyfotografico;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import client.api.AuthApi;
 import client.api.UsersApi;
 import client.model.AuthToken;
 import client.model.User;
+import okhttp3.internal.Util;
 
 public class LogInActivity extends AppCompatActivity {
 
@@ -58,7 +60,7 @@ public class LogInActivity extends AppCompatActivity {
                     Session.setToken(token, this);
 
                     runOnUiThread(() -> {
-                        Utils.showNotification(this, getString(R.string.notification_succeeded_title), getString(R.string.notification_user_successfully_auth_body));
+                        Utils.showMessage(this, getString(R.string.notification_user_successfully_auth_body), false);
                         // Solo aquí lanzamos el Intent
                         Intent intent = new Intent(this, ContestActivity.class);
                         startActivity(intent);
@@ -66,12 +68,12 @@ public class LogInActivity extends AppCompatActivity {
 
                 } catch (ApiException apiException) {
                     runOnUiThread(() -> {
-                        Utils.showNotification(this, getString(R.string.notification_error_title), getString(R.string.notification_error_authenticating_user_body));
+                        Utils.showMessage(this, getString(R.string.notification_error_authenticating_user_body), true);
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
                     runOnUiThread(() -> {
-                        Utils.showNotification(this, getString(R.string.notification_error_title), getString(R.string.notification_unexpected_error_body));
+                        Utils.showMessage(this, getString(R.string.notification_unexpected_error_body), true);
                     });
                 }
             }).start();

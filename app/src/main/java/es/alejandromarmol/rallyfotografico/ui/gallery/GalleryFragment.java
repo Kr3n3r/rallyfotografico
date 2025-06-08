@@ -243,7 +243,7 @@ public class GalleryFragment extends Fragment {
             } catch (Exception e) {
                 Log.e("API_ERROR", "Error al votar", e);
                 requireActivity().runOnUiThread(() ->
-                        Utils.showNotification(getContext(), getContext().getString(R.string.notification_error_title), getContext().getString(R.string.notification_error_voting))
+                        Utils.showMessage(getContext(), getContext().getString(R.string.notification_error_voting), true)
                 );
             }
         }).start();

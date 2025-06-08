@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -26,12 +27,9 @@ import client.model.Contest;
 import client.model.Photo;
 import client.model.User;
 import es.alejandromarmol.rallyfotografico.ui.home.PhotoAdapter;
+import es.dmoral.toasty.Toasty;
 
 public class Utils {
-    private static final String CHANNEL_ID = "rally_notification_channel";
-    private static final String CHANNEL_NAME = "Notificaciones de Rally";
-    private static final String CHANNEL_DESCRIPTION = "Mensajes emergentes para el usuario";
-
     public static void loadPhotos(Fragment fragment, PhotoAdapter adapter, List<Photo> photoList) {
         new Thread(() -> {
             try {
@@ -50,7 +48,7 @@ public class Utils {
             } catch (Exception e) {
                 Log.e("API_ERROR", "Error al obtener las fotos", e);
                 fragment.requireActivity().runOnUiThread(() ->
-                        Utils.showNotification(fragment.getContext(), fragment.getContext().getString(R.string.notification_error_title), fragment.getContext().getString(R.string.notification_error_getting_photos))
+                        Utils.showMessage(fragment.getContext(), fragment.getContext().getString(R.string.notification_error_getting_photos), true)
                 );
             }
         }).start();
@@ -136,38 +134,14 @@ public class Utils {
         }).start();
     }
 
-    public static void showNotification(Context context, String title, String content) {
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
 
-        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS)
-                != PackageManager.PERMISSION_GRANTED) {
-            Log.w("Utils", "Permiso POST_NOTIFICATIONS no concedido");
-            return;
-        }
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_background) // Asegúrate de tener un icono
-                .setContentTitle(title)
-                .setContentText(content)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true);
-
-        notificationManager.notify(new Random().nextInt(), builder.build());
-    }
-
-    public static void createNotificationChannel(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = CHANNEL_NAME;
-            String description = CHANNEL_DESCRIPTION;
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-
-            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
-            if (notificationManager != null) {
-                notificationManager.createNotificationChannel(channel);
-            }
+    public static void showMessage(Context context, String message, boolean isError) {
+        if (isError) {
+            Toasty.error(context, message, Toast.LENGTH_SHORT, true).show();
+        } else {
+            Toasty.success(context, message, Toast.LENGTH_SHORT, true).show();
         }
     }
 
-    }
+
+}

@@ -60,7 +60,6 @@ public class SignUpActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
         requestNotificationPermissionIfNeeded();
-        Utils.createNotificationChannel(this);
 
         Button submitButton = findViewById(R.id.btn_submit);
         TextView loginLink = findViewById(R.id.tv_login_link);
@@ -129,7 +128,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         if (!checkBox.isChecked()) {
-            Utils.showNotification(this, getString(R.string.notification_error_title), getString(R.string.terms_not_accepted_error));
+            Utils.showMessage(this, getString(R.string.terms_not_accepted_error), true);
             return false;
         }
 
@@ -158,7 +157,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Session.setToken(authApi.authCreate(username, password, ""), this);
 
                 runOnUiThread(() -> {
-                    Utils.showNotification(this, getString(R.string.notification_succeeded_title), getString(R.string.notification_user_created_body));
+                    Utils.showMessage(this, getString(R.string.notification_user_created_body), false);
                     // Solo aquí lanzamos el Intent
                     Intent intent = new Intent(this, LogInActivity.class);
                     startActivity(intent);
@@ -166,12 +165,12 @@ public class SignUpActivity extends AppCompatActivity {
 
             } catch (ApiException apiException) {
                 runOnUiThread(() -> {
-                    Utils.showNotification(this, getString(R.string.notification_error_title), getString(R.string.notification_error_creating_user_body));
+                    Utils.showMessage(this, getString(R.string.notification_error_creating_user_body), true);
                 });
             } catch (Exception e) {
                 e.printStackTrace();
                 runOnUiThread(() -> {
-                    Utils.showNotification(this, getString(R.string.notification_error_title), getString(R.string.notification_unexpected_error_body));
+                    Utils.showMessage(this, getString(R.string.notification_unexpected_error_body), true);
                 });
 
             }
