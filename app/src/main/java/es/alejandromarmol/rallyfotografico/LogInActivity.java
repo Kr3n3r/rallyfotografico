@@ -66,7 +66,7 @@ public class LogInActivity extends AppCompatActivity {
                     Session.setToken(token, this);
 
                     runOnUiThread(() -> {
-                        Utils.showMessage(this, getString(R.string.notification_user_successfully_auth_body), Utils.MessageType.ERROR);
+                        Utils.showMessage(this, getString(R.string.notification_user_successfully_auth_body), Utils.MessageType.OK);
                         // Solo aquí lanzamos el Intent
                         Intent intent = new Intent(this, ContestActivity.class);
                         startActivity(intent);

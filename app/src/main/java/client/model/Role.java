@@ -65,14 +65,18 @@ public class Role {
     return result;
   }
 
+//  @Override
+//  public String toString()  {
+//    StringBuilder sb = new StringBuilder();
+//    sb.append("class Role {\n");
+//
+//    sb.append("  id: ").append(id).append("\n");
+//    sb.append("  name: ").append(name).append("\n");
+//    sb.append("}\n");
+//    return sb.toString();
+//  }
   @Override
   public String toString()  {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class Role {\n");
-    
-    sb.append("  id: ").append(id).append("\n");
-    sb.append("  name: ").append(name).append("\n");
-    sb.append("}\n");
-    return sb.toString();
+    return String.format("%s (id: %s)", getName(), getId());
   }
 }

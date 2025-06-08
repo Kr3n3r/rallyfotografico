@@ -10,7 +10,9 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -22,13 +24,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
+import client.ApiException;
 import client.api.ContestsApi;
 import client.api.PhotosApi;
+import client.api.RolesApi;
 import client.api.UsersApi;
 import client.model.Contest;
+import client.model.PatchedUser;
 import client.model.Photo;
+import client.model.Role;
 import client.model.User;
+import es.alejandromarmol.rallyfotografico.ui.dashboard.UserAdapter;
 import es.alejandromarmol.rallyfotografico.ui.home.PhotoAdapter;
 import es.dmoral.toasty.Toasty;
 
@@ -238,5 +247,118 @@ public class Utils {
         });
     }
 
+    public static void destroyPhoto(Fragment fragment, Photo photo, ContestCallback callback) {
+        new Thread(() -> {
+            try {
+                PhotosApi photosApi = new PhotosApi();
+                photosApi.getInvoker().setApiKeyPrefix("Token");
+                photosApi.getInvoker().setApiKey(Session.getToken(fragment.getContext()));
+                photosApi.photosDestroy(photo.getId());
 
+//                fragment.requireActivity().runOnUiThread(() -> {
+//                    callback.onContestLoaded(finalContest);
+//                });
+
+            } catch (Exception e) {
+                Log.e("API_ERROR", "Error getting contest", e);
+//                fragment.requireActivity().runOnUiThread(() ->
+//                        callback.onError(e)
+//                );
+            }
+        }).start();
+    }
+
+    public static void loadUsers(Fragment fragment, UserAdapter adapter, List<User> userList) {
+        new Thread(() -> {
+            try {
+                UsersApi usersApi = new UsersApi();
+                usersApi.getInvoker().setApiKey(Session.getToken(fragment.getContext()));
+                List<User> responseUsers = usersApi.usersList();
+
+                fragment.requireActivity().runOnUiThread(() -> {
+                    userList.clear();
+                    userList.addAll(responseUsers);
+                    adapter.notifyDataSetChanged();
+                });
+
+            } catch (Exception e) {
+                Log.e("API_ERROR", "Error al obtener los usuarios", e);
+                fragment.requireActivity().runOnUiThread(() ->
+                        Utils.showMessage(fragment.getContext(), fragment.getContext().getString(R.string.notification_error_getting_users), MessageType.ERROR)
+                );
+            }
+        }).start();
+    }
+
+    public static void loadGroupsIntoSpinner(Fragment fragment, Spinner spinner) {
+        new Thread(() -> {
+            try {
+                RolesApi rolesApi = new RolesApi();
+                rolesApi.getInvoker().setApiKey(Session.getToken(fragment.getContext()));
+                rolesApi.getInvoker().setApiKeyPrefix("Token");
+                List<Role> roleList = rolesApi.rolesList();
+
+                fragment.requireActivity().runOnUiThread(() -> {
+                    ArrayAdapter<Role> adapter = new ArrayAdapter<>(fragment.requireContext(),
+                            android.R.layout.simple_spinner_item, roleList);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinner.setAdapter(adapter);
+                });
+            } catch (Exception e) {
+                Log.e("API_ERROR", "Error al cargar roles", e);
+            }
+        }).start();
+    }
+
+    public static void createNewGroup(Context context, String groupName) {
+        new Thread(() -> {
+            try {
+                RolesApi rolesApi = new RolesApi();
+                rolesApi.getInvoker().setApiKey(Session.getToken(context));
+                rolesApi.getInvoker().setApiKeyPrefix("Token");
+                Role role = new Role();
+                role.setName(groupName);
+                rolesApi.rolesCreate(role);
+            } catch (Exception e) {
+                Log.e("API_ERROR", "Error al cargar roles", e);
+            }
+        }).start();
+    }
+
+    public static void deleteGroup(Context context, int groupId) {
+        new Thread(() -> {
+            try {
+                RolesApi rolesApi = new RolesApi();
+                rolesApi.getInvoker().setApiKey(Session.getToken(context));
+                rolesApi.getInvoker().setApiKeyPrefix("Token");
+                rolesApi.rolesDestroy(groupId);
+            } catch (Exception e) {
+                Log.e("API_ERROR", "Error al eliminar roles", e);
+            }
+        }).start();
+    }
+
+    public static void updateUser(Context context, int userId, String username, String email) {
+        new Thread(() -> {
+            try {
+                UsersApi usersApi = new UsersApi();
+                usersApi.getInvoker().setApiKey(Session.getToken(context));
+                usersApi.getInvoker().setApiKeyPrefix("Token");
+                User user = usersApi.usersRetrieve(userId);
+                user.setUsername(username);
+                user.setEmail(email);
+                usersApi.usersUpdate(userId, user);
+            } catch (ApiException e) {
+//                Utils.showMessage(context, context.getString(R.string.notification_error_updating_user_body), MessageType.WARN);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (TimeoutException e) {
+                throw new RuntimeException(e);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
+    }
 }

@@ -27,6 +27,7 @@ import java.util.List;
 
 import client.ApiException;
 import client.api.AuthApi;
+import client.api.RolesApi;
 import client.api.UsersApi;
 import client.model.User;
 
@@ -144,7 +145,7 @@ public class SignUpActivity extends AppCompatActivity {
                 user.setUsername(username);
                 user.setPassword(password);
                 user.setEmail(email);
-                List<URI> groups = new ArrayList<>();
+                List<String> groups = new ArrayList<>();
                 user.setGroups(groups);
 
                 usersApi.usersCreate(user);

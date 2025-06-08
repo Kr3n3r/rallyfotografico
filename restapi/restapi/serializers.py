@@ -5,6 +5,8 @@ from api.models import Contest, Photo, Vote
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     photos = serializers.SerializerMethodField()
+    groups = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
 
     # This method retrieves the photos associated with the user.
     def get_photos(self, obj):

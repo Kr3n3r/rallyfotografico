@@ -91,12 +91,12 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/btnParticipant"
+                android:id="@+id/btnManageGroups"
                 style="@style/RoundedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Participant" />
+                android:text="@string/manage_group_button" />
 
             <Space
                 android:layout_width="8dp"
