@@ -33,6 +33,13 @@ class RoleViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows roles to be viewed or edited.
     """
+    def get_permissions(self):
+        if self.action in ['list'] :
+            return [AllowAny()]
+        elif self.action in ['create', 'update', 'partial_update', 'retrieve']:
+            return [IsAuthenticated()]
+        else:
+            return [IsAdminUser()]
     queryset = Group.objects.all().order_by('name')
     serializer_class = RoleSerializer
     permission_classes = [permissions.IsAdminUser]
