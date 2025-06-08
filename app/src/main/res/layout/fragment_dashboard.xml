@@ -46,21 +46,23 @@
                 android:padding="16dp">
 
                 <TextView
-                    android:id="@+id/tvNotifications"
+                    android:id="@+id/tvContestTitle"
                     style="@style/TextSubtitle"
                     android:layout_weight="1"
-                    android:text="Notifications"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Contest title"
+                    android:ellipsize="end"
+                    android:singleLine="true" />
 
                 <Button
-                    android:id="@+id/btnEditNotifications"
+                    android:id="@+id/btnEditContest"
                     style="@style/RoundedButton"
                     android:background="@null"
                     android:text="Edit"
                     android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    />
+                    android:layout_width="wrap_content" />
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -77,8 +79,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvUsers"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false" />
+            android:layout_height="300dp"
+            android:scrollbars="vertical"/>
 
         <!-- Botones para cambiar rol -->
         <LinearLayout

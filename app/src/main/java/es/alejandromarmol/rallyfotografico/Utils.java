@@ -66,6 +66,19 @@ public class Utils {
         }).start();
     }
 
+    public static void loadRoles(Fragment fragment, List<Role> roleList) {
+        new Thread(() -> {
+            try {
+                RolesApi rolesApi = new RolesApi();
+                rolesApi.getInvoker().setApiKey(Session.getToken(fragment.getContext()));
+                List<Role> responseRoles = rolesApi.rolesList();
+                roleList.addAll(responseRoles);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
     public interface ContestCallback {
         void onContestLoaded(Contest contest);
         void onError(Exception e);
@@ -349,7 +362,9 @@ public class Utils {
                 user.setEmail(email);
                 usersApi.usersUpdate(userId, user);
             } catch (ApiException e) {
-//                Utils.showMessage(context, context.getString(R.string.notification_error_updating_user_body), MessageType.WARN);
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    Utils.showMessage(context, context.getString(R.string.notification_error_updating_user_body), MessageType.WARN);
+                });
             } catch (ExecutionException e) {
                 throw new RuntimeException(e);
             } catch (InterruptedException e) {
@@ -361,4 +376,50 @@ public class Utils {
             }
         }).start();
     }
+
+    public static void deleteUser(Context context, int userId) {
+        new Thread(() -> {
+            try {
+                UsersApi usersApi = new UsersApi();
+                usersApi.getInvoker().setApiKeyPrefix("Token");
+                usersApi.getInvoker().setApiKey(Session.getToken(context));
+                usersApi.usersDestroy(userId);
+
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    Utils.showMessage(context, context.getString(R.string.notification_ok_deleting_user_body), MessageType.OK);
+                });
+
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    Utils.showMessage(context, context.getString(R.string.notification_error_deleting_user_body), MessageType.ERROR);
+                });
+            }
+        }).start();
+    }
+
+    public static void updateContest(Context context, Contest contest) {
+        new Thread(() -> {
+            try {
+                ContestsApi contestsApi = new ContestsApi();
+                contestsApi.getInvoker().setApiKey(Session.getToken(context));
+                contestsApi.getInvoker().setApiKeyPrefix("Token");
+                contestsApi.contestsUpdate(contest.getId(), contest);
+            } catch (ApiException e) {
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    Utils.showMessage(context, context.getString(R.string.notification_error_updating_contest_body), MessageType.WARN);
+                });
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (TimeoutException e) {
+                throw new RuntimeException(e);
+            } catch (Exception e) {
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    Utils.showMessage(context, context.getString(R.string.notification_error_updating_contest_body), MessageType.ERROR);
+                });
+            }
+        }).start();
+    }
+
 }

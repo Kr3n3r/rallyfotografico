@@ -1,5 +1,7 @@
 package es.alejandromarmol.rallyfotografico.ui.gallery;
 
+import static android.app.ProgressDialog.show;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -118,9 +120,9 @@ public class GalleryFragment extends Fragment {
         });
 
         new AlertDialog.Builder(requireContext())
-                .setTitle("Subir foto")
+                .setTitle(getString(R.string.upload_photo_title))
                 .setView(dialogView)
-                .setPositiveButton("Subir", (dialog, which) -> {
+                .setPositiveButton(R.string.upload_photo, (dialog, which) -> {
                     String title = inputTitle.getText().toString();
 //                    UUID contestId = (UUID) spinnerContests.getSelectedItem();
                     Contest contest = (Contest) spinnerContests.getSelectedItem();
@@ -152,10 +154,10 @@ public class GalleryFragment extends Fragment {
 //                            photo.setOwnerName("admin");
                             uploadPhoto(imageFile, photo);
                         } catch (IOException e) {
-                            Toast.makeText(getContext(), "Error al procesar imagen", Toast.LENGTH_SHORT).show();
+                            Utils.showMessage(getContext(), getString(R.string.notification_error_procesing_photos), Utils.MessageType.ERROR);;
                         }
                     } else {
-                        Toast.makeText(getContext(), "Selecciona una imagen", Toast.LENGTH_SHORT).show();
+                        Utils.showMessage(getContext(), getString(R.string.notification_warn_select_photo), Utils.MessageType.WARN);
                     }
                 })
                 .setNegativeButton("Cancelar", null)
@@ -177,13 +179,13 @@ public class GalleryFragment extends Fragment {
                     });
 
                     requireActivity().runOnUiThread(() -> {
-                        Toast.makeText(getContext(), "Foto subida correctamente", Toast.LENGTH_SHORT).show();
+                        Utils.showMessage(getContext(), getString(R.string.notification_ok_uploading_photo), Utils.MessageType.OK);
                         Utils.loadPhotos(this, adapter, photoList);
                     });
             } catch (Exception e) {
                 Log.e("UPLOAD_ERROR", "Error al subir foto", e);
                 requireActivity().runOnUiThread(() ->
-                        Toast.makeText(getContext(), "Error al subir foto", Toast.LENGTH_SHORT).show()
+                        Utils.showMessage(getContext(), getString(R.string.notification_error_procesing_photos), Utils.MessageType.ERROR)
                 );
             }
         }).start();

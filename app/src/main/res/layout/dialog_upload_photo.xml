@@ -11,6 +11,12 @@
         android:layout_height="wrap_content"
         android:hint="@string/photo_title" />
 
+    <EditText
+        android:id="@+id/inputDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/photo_description" />
+
     <Spinner
         android:id="@+id/inputContest"
         android:layout_width="match_parent"
@@ -31,12 +37,5 @@
         android:layout_marginTop="8dp"
         android:scaleType="centerCrop"
         android:visibility="gone"/>
-
-    <Button
-        android:id="@+id/buttonUploadPhoto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/upload_photo_button"
-        android:layout_marginTop="24dp" />
 
 </LinearLayout>

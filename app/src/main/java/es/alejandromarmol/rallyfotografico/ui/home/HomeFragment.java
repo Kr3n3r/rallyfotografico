@@ -6,12 +6,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.bumptech.glide.Glide;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,7 +48,7 @@ public class HomeFragment extends Fragment {
     private PhotoAdapter adapter;
     private List<Photo> photoList = new ArrayList<>();
     private Contest contest;
-    private String contestName, submissionDeadline, votingDeadline = new String();
+    private String contestName, submissionDeadline, votingDeadline, description = new String();
     private TextView countdownTextView;
     private CountDownTimer countDownTimer;
 
@@ -57,7 +61,26 @@ public class HomeFragment extends Fragment {
 
         // Configurar RecyclerView
         binding.recyclerPhotos.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new PhotoAdapter(getContext(), photoList, getString(R.string.view_details_title), photo -> photo.getName() ,null);
+        adapter = new PhotoAdapter(getContext(), photoList, getString(R.string.view_details_title), photo -> photo.getName() ,photo -> {
+            // Inflate dialog layout
+            LayoutInflater imageInflater = LayoutInflater.from(getContext());
+            View dialogView = imageInflater.inflate(R.layout.dialog_photo_preview, null);
+            ImageView imagePreview = dialogView.findViewById(R.id.imagePreview);
+
+            // Carga la imagen con Glide
+            Glide.with(getContext())
+                    .load(photo.getImage().toString())
+                    .into(imagePreview);
+
+            // Construye el diálogo
+            AlertDialog dialog = new AlertDialog.Builder(getContext())
+                    .setView(dialogView)
+                    .setPositiveButton(android.R.string.ok, (d, which) -> d.dismiss())
+                    .create();
+
+            dialog.show();
+
+        });
         binding.recyclerPhotos.setAdapter(adapter);
         binding.recyclerPhotos.addItemDecoration(new VerticalSpacingItemDecoration(24));
 
@@ -68,6 +91,7 @@ public class HomeFragment extends Fragment {
                 loadContestName(contest);
                 loadSubmissionDeadline(contest);
                 loadVotingDeadline(contest);
+                loadDescription(contest);
                 countdownTextView = binding.tvCountdown;
                 String date = contest.getEndDate().toString();
                 startCountdownTo(date);
@@ -161,6 +185,24 @@ public class HomeFragment extends Fragment {
                 Log.e("ERROR", "Error getting voting deadline", e);
                 requireActivity().runOnUiThread(() ->
                         Utils.showMessage( getContext(), getContext().getString(R.string.notification_error_getting_voting_deadline), Utils.MessageType.ERROR)
+                );
+            }
+        }).start();
+    }
+
+    private void loadDescription(Contest contest) {
+        new Thread(() -> {
+            try {
+                requireActivity().runOnUiThread(() -> {
+                    this.description="";
+                    description = contest.getDescription();
+                    binding.tvDescription.setText(this.description);
+                    adapter.notifyDataSetChanged();
+                });
+
+            } catch (Exception e) {
+                requireActivity().runOnUiThread(() ->
+                        Utils.showMessage( getContext(), getContext().getString(R.string.notification_error_getting_description), Utils.MessageType.ERROR)
                 );
             }
         }).start();

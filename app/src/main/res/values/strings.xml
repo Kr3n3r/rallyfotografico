@@ -16,6 +16,7 @@
     <string name="vote_title">Vote</string>
     <string name="add_photo">Upload photo</string>
     <string name="photo_title">Photo title</string>
+    <string name="photo_description">Description</string>
     <string name="contest_input_hint">Contest\n</string>
     <string name="select_image_input">Select image...</string>
     <string name="upload_photo_button">Upload photo</string>
@@ -36,13 +37,14 @@
     <string name="notification_user_successfully_auth_body">User authenticated correctly</string>
     <string name="notification_error_authenticating_user_body">Invalid credentials</string>
     <string name="notification_error_updating_user_body">Error updating user information. Please check the data is valid.</string>
+    <string name="notification_error_updating_contest_body">Error updating contest information</string>
     <string name="notification_error_creating_user_body">API error received creating user</string>
     <string name="notification_unexpected_error_body">Unexpected error received</string>
     <string name="notification_error_getting_photos">Error getting photos</string>
     <string name="notification_error_getting_contest">Error getting contest info</string>
     <string name="notification_error_getting_contest_deadline">Error getting contest deadline</string>
     <string name="notification_error_getting_voting_deadline">Error getting voting deadline</string>
-    <string name="notification_error_getting_contest_name">Error getting voting name</string>
+    <string name="notification_error_getting_contest_name">Error getting contest name</string>
     <string name="notification_error_voting">Error when voting</string>
     <string name="notification_error_getting_users">Error getting users</string>
     <string name="manage_group_button">Manage groups</string>
@@ -61,8 +63,20 @@
     <string name="delete_user_button">Delete</string>
     <string name="manage_roles_button">Manage user roles</string>
     <string name="reset_password_button">Reset password</string>
+    <string name="notification_error_deleting_user_body">Error deleting user. Maybe you are not admin</string>
+    <string name="notification_error_retrieving_roles_body">Error retrieving roles</string>
+    <string name="notification_ok_deleting_user_body">User deleted successfully</string>
+    <string name="notification_error_getting_description">Error getting description</string>
 
-
+    <string name="edit_contest_title">Manage contest data and information</string>
+    <string name="contest_name_hint">Contest name</string>
+    <string name="contest_description_hint">Contest description here</string>
+    <string name="upload_photo_title">Upload photo</string>
+    <string name="upload_photo">Upload</string>
+    <string name="notification_warn_select_photo">Select a photo to upload</string>
+    <string name="notification_error_procesing_photos">Error processing photos</string>
+    <string name="notification_ok_uploading_photo">Photo uploaded</string>
+    <string name="notification_error_getting_role_id">Error getting role id</string>
 
 
 </resources>
