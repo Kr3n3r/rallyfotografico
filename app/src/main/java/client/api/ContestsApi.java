@@ -18,6 +18,7 @@ import client.Pair;
 
 import client.model.*;
 
+import java.net.URI;
 import java.util.*;
 
 import com.android.volley.Response;
@@ -825,5 +826,15 @@ public class ContestsApi {
     } catch (ApiException ex) {
       errorListener.onErrorResponse(new VolleyError(ex));
     }
+  }
+
+  public URI getContestURI(UUID uuid) throws ExecutionException, InterruptedException, TimeoutException, ApiException {
+    if (uuid == null) {
+      throw new IllegalArgumentException("UUID del concurso no puede ser null");
+    }
+
+    // Usa solo el UUID directamente, no es necesario recuperar el Contest completo
+    String fullUrl = String.format("%s/contests/%s/", basePath.replaceAll("/$", ""), uuid.toString());
+    return URI.create(fullUrl);
   }
 }

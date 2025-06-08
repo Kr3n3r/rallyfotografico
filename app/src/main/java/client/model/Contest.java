@@ -24,6 +24,8 @@ public class Contest {
   private UUID id = null;
   @SerializedName("name")
   private String name = null;
+  @SerializedName("description")
+  private String description = null;
   @SerializedName("start_date")
   private Date startDate = null;
   @SerializedName("end_date")
@@ -53,6 +55,16 @@ public class Contest {
   }
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   **/
+  @ApiModelProperty(value = "")
+  public String getDescription() {
+    return description;
+  }
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   /**
@@ -119,6 +131,7 @@ public class Contest {
     Contest contest = (Contest) o;
     return (this.id == null ? contest.id == null : this.id.equals(contest.id)) &&
         (this.name == null ? contest.name == null : this.name.equals(contest.name)) &&
+        (this.description == null ? contest.description == null : this.description.equals(contest.description)) &&
         (this.startDate == null ? contest.startDate == null : this.startDate.equals(contest.startDate)) &&
         (this.endDate == null ? contest.endDate == null : this.endDate.equals(contest.endDate)) &&
         (this.votingStartDate == null ? contest.votingStartDate == null : this.votingStartDate.equals(contest.votingStartDate)) &&
@@ -139,19 +152,24 @@ public class Contest {
     return result;
   }
 
+//  @Override
+//  public String toString()  {
+//    StringBuilder sb = new StringBuilder();
+//    sb.append("class Contest {\n");
+//
+//    sb.append("  id: ").append(id).append("\n");
+//    sb.append("  name: ").append(name).append("\n");
+//    sb.append("  startDate: ").append(startDate).append("\n");
+//    sb.append("  endDate: ").append(endDate).append("\n");
+//    sb.append("  votingStartDate: ").append(votingStartDate).append("\n");
+//    sb.append("  votingEndDate: ").append(votingEndDate).append("\n");
+//    sb.append("  maxPhotosPerUser: ").append(maxPhotosPerUser).append("\n");
+//    sb.append("}\n");
+//    return sb.toString();
+//  }
+
   @Override
-  public String toString()  {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class Contest {\n");
-    
-    sb.append("  id: ").append(id).append("\n");
-    sb.append("  name: ").append(name).append("\n");
-    sb.append("  startDate: ").append(startDate).append("\n");
-    sb.append("  endDate: ").append(endDate).append("\n");
-    sb.append("  votingStartDate: ").append(votingStartDate).append("\n");
-    sb.append("  votingEndDate: ").append(votingEndDate).append("\n");
-    sb.append("  maxPhotosPerUser: ").append(maxPhotosPerUser).append("\n");
-    sb.append("}\n");
-    return sb.toString();
+  public String toString() {
+    return name;
   }
 }

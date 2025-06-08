@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Encabezado de la tabla -->
+        <TableLayout
+            android:id="@+id/rolesTable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="0,1"
+            android:shrinkColumns="0,1">
+
+            <TableRow>
+                <TextView
+                    android:text="Role"
+                    android:textStyle="bold"
+                    android:padding="8dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:text="Action"
+                    android:textStyle="bold"
+                    android:padding="8dp"
+                    android:layout_width="wrap_content" />
+            </TableRow>
+
+            <!-- Filas dinámicas con nombre del rol y botón -->
+            <!-- Ejemplo estático -->
+            <!--
+            <TableRow>
+                <TextView
+                    android:text="Admin"
+                    android:padding="8dp" />
+
+                <Button
+                    android:id="@+id/btnToggleAdmin"
+                    android:text="Remove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </TableRow>
+            -->
+
+        </TableLayout>
+    </LinearLayout>
+</ScrollView>

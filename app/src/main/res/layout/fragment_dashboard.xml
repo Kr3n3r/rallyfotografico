@@ -1,22 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.dashboard.DashboardFragment">
+    android:background="@color/background"
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/text_dashboard"
+    <LinearLayout
+        android:id="@+id/adminDashboardLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:orientation="vertical">
+
+        <!-- Título del dashboard -->
+        <TextView
+            android:id="@+id/tvDashboardTitle"
+            style="@style/TextTitle"
+            android:text="Admin Dashboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <!-- Descripción del concurso -->
+        <TextView
+            android:id="@+id/tvContestDescription"
+            style="@style/TextBody"
+            android:layout_marginTop="8dp"
+            android:text="Contest Title and Description will appear here. Make sure to write enough to fill the space."
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <!-- Opciones (una Card por cada sección editable) -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tvContestTitle"
+                    style="@style/TextSubtitle"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="Contest title"
+                    android:ellipsize="end"
+                    android:singleLine="true" />
+
+                <Button
+                    android:id="@+id/btnEditContest"
+                    style="@style/RoundedButton"
+                    android:background="@null"
+                    android:text="Edit"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Lista de usuarios -->
+        <TextView
+            android:id="@+id/tvUsersLabel"
+            style="@style/TextSubtitle"
+            android:text="Users"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvUsers"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:scrollbars="vertical"/>
+
+        <!-- Botones para cambiar rol -->
+        <LinearLayout
+            android:id="@+id/btnUserRoleSelector"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnManageGroups"
+                style="@style/RoundedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/manage_group_button" />
+
+            <Space
+                android:layout_width="8dp"
+                android:layout_height="0dp" />
+
+        </LinearLayout>
+
+        <!-- Sección de fotos enviadas -->
+        <TextView
+            android:id="@+id/tvSubmittedPhotos"
+            style="@style/TextSubtitle"
+            android:text="Submitted Photos"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSubmittedPhotos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false" />
+    </LinearLayout>
+</ScrollView>

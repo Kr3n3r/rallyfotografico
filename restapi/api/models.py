@@ -29,6 +29,7 @@ class Contest(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100, blank=False,
                             default='Contest Name')
+    description = models.TextField(blank=True, default='No description provided.')
     start_date = models.DateTimeField(blank=False)
     end_date = models.DateTimeField(blank=False)
     voting_start_date = models.DateTimeField(blank=False)
@@ -84,6 +85,7 @@ class Photo(models.Model):
 
     image = models.ImageField(upload_to=upload_to)
     name = models.CharField(max_length=100, blank=False, default='Photo Name')
+    description = models.TextField(blank=True, default='No description provided.')
     owner = models.ForeignKey(
         'auth.User', on_delete=models.CASCADE, editable=False)
     status = models.CharField(max_length=20, blank=False,

@@ -27,7 +27,7 @@ public class PatchedUser {
   @SerializedName("email")
   private String email = null;
   @SerializedName("groups")
-  private List<URI> groups = null;
+  private List<String> groups = null;
   @SerializedName("photos")
   private String photos = null;
 
@@ -66,10 +66,10 @@ public class PatchedUser {
    * The groups this user belongs to. A user will get all permissions granted to each of their groups.
    **/
   @ApiModelProperty(value = "The groups this user belongs to. A user will get all permissions granted to each of their groups.")
-  public List<URI> getGroups() {
+  public List<String> getGroups() {
     return groups;
   }
-  public void setGroups(List<URI> groups) {
+  public void setGroups(List<String> groups) {
     this.groups = groups;
   }
 

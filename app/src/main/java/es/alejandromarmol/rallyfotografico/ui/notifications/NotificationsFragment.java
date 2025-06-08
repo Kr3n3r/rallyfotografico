@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import client.model.AuthToken;
+import es.alejandromarmol.rallyfotografico.LauncherActivity;
 import es.alejandromarmol.rallyfotografico.Session;
 import es.alejandromarmol.rallyfotografico.databinding.FragmentNotificationsBinding;
 
@@ -32,6 +33,7 @@ public class NotificationsFragment extends Fragment {
             AuthToken authToken = new AuthToken();
             authToken.setToken("");
             Session.setToken(authToken,this.getContext());
+            Session.checkTokenAndIntent(getContext(), LauncherActivity.class, getActivity());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
