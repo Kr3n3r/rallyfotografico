@@ -164,6 +164,7 @@ public class DashboardFragment extends Fragment {
                     String contestName="";
                     contestName = contest.getName().toString();
                     binding.tvContestTitle.setText(contestName);
+                    binding.tvDashboardTitle.setText(contestName);
                     adapter.notifyDataSetChanged();
                 });
 
@@ -267,12 +268,18 @@ public class DashboardFragment extends Fragment {
         EditText maxPhotoPerUserInput = dialogView.findViewById(R.id.maxPhotoPerUserInput);
         Button saveButton = dialogView.findViewById(R.id.buttonSaveContest);
 
+        SimpleDateFormat displayFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
         inputName.setText(contest.getName());
         inputDescription.setText(contest.getDescription());
-        input_start_date.setText(contest.getStartDate().toString());
-        input_end_date.setText(contest.getEndDate().toString());
-        input_voting_start_date.setText(contest.getVotingStartDate().toString());
-        input_voting_end_date.setText(contest.getVotingEndDate().toString());
+
+        // Mostrar fechas en formato yyyy-MM-dd
+        input_start_date.setText(displayFormat.format(contest.getStartDate()));
+        input_end_date.setText(displayFormat.format(contest.getEndDate()));
+        input_voting_start_date.setText(displayFormat.format(contest.getVotingStartDate()));
+        input_voting_end_date.setText(displayFormat.format(contest.getVotingEndDate()));
+
         maxPhotoPerUserInput.setText(contest.getMaxPhotosPerUser().toString());
 
         setupDatePicker(input_start_date);
@@ -280,13 +287,12 @@ public class DashboardFragment extends Fragment {
         setupDatePicker(input_voting_start_date);
         setupDatePicker(input_voting_end_date);
 
-        SimpleDateFormat parser = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
-
         saveButton.setOnClickListener(view -> {
             try {
                 contest.setName(inputName.getText().toString());
                 contest.setDescription(inputDescription.getText().toString());
 
+                // Parsear fechas usando el mismo formato
                 java.util.Date startDate = parser.parse(input_start_date.getText().toString());
                 java.util.Date endDate = parser.parse(input_end_date.getText().toString());
                 java.util.Date votingStartDate = parser.parse(input_voting_start_date.getText().toString());
