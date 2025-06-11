@@ -31,13 +31,13 @@
 <br />
 <div align="center">
   <a href="https://github.com/Kr3n3r/rallyfotografico">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src=".github/images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">Rally Fotográfico</h3>
 
   <p align="center">
-    Un proyecto mobile para simular un Rally Fotográfico
+    An mobile project to simulate photo rally
     <br />
     <a href="https://github.com/Kr3n3r/rallyfotografico"><strong>Explore the docs »</strong></a>
     <br />
@@ -83,9 +83,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<img src=".github/images/screenshot.png" alt="Logo">
 
-Este proyecto incluye la app del rally fotográfico programado para el módulo de TFG de DAM del I.E.S Velázquez. 
+This project includes photo rally app built for TFG module of DAM at I.E.S Velázquez
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -114,31 +114,41 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+* python >= 3.11
   ```sh
-  npm install npm@latest -g
+  https://www.python.org/downloads/
   ```
+* Android Device or emulator and IDE
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
+1. Create a folder and
 2. Clone the repo
    ```sh
-   git clone https://github.com/Kr3n3r/rallyfotografico.git
+   git clone https://github.com/Kr3n3r/rallyfotografico.git .
    ```
-3. Install NPM packages
+3. Create python virtual env and install dependencies
    ```sh
-   npm install
+    py -m venv .venv
+    .\.venv\Scripts\Activate.ps1
+    pip install -r .\requirements.txt
+    cd .\restapi\
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-5. Change git remote url to avoid accidental pushes to base project
+4. Apply migrations
    ```sh
-   git remote set-url origin Kr3n3r/rallyfotografico
-   git remote -v # confirm the changes
+   python .\manage.py migrate
+   ```
+5. (OPTIONAL) Launch the mockup
+   ```sh
+   py .\manage.py loaddata .\mockup\mockup_groups\MOCK_DATA_GROUPS.json --format=json --app auth.group
+   py .\manage.py loaddata .\mockup\mockup_users\MOCK_DATA_USER.json --format=json --app auth.user
+   py .\manage.py loaddata .\mockup\mockup_contest\MOCK_DATA_CONTEST.json --format=json --app api.contest
+   py .\manage.py loaddata .\mockup\mockup_photos\MOCK_DATA_PHOTO.json --format=json --app api.photo
+   py .\manage.py loaddata .\mockup\mockup_votes\MOCK_DATA_VOTES.json --format=json --app api.vote
+   ```
+6. Run a server
+   ```sh
+   python .\manage.py runserver 0.0.0.0:8000
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -148,7 +158,7 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+See user, admin and installation manual.
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
