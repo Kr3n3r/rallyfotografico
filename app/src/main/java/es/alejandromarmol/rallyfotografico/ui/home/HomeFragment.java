@@ -61,7 +61,7 @@ public class HomeFragment extends Fragment {
 
         // Configurar RecyclerView
         binding.recyclerPhotos.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new PhotoAdapter(getContext(), photoList, getString(R.string.view_details_title), photo -> photo.getName() ,photo -> {
+        adapter = new PhotoAdapter(getContext(), photoList, getString(R.string.view_details_title), null ,photo -> {
             // Inflate dialog layout
             LayoutInflater imageInflater = LayoutInflater.from(getContext());
             View dialogView = imageInflater.inflate(R.layout.dialog_photo_preview, null);

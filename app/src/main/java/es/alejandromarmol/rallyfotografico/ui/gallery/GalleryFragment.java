@@ -77,7 +77,13 @@ public class GalleryFragment extends Fragment {
 //
         // Configurar RecyclerView
         binding.recyclerPhotos.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new PhotoAdapter(getContext(), photoList, getString(R.string.vote_title), photo -> String.format("Number of votes: %s", photo.getVotes()) ,photo -> {
+        PhotoAdapter.SubtitleProvider subtitleProvider = new PhotoAdapter.SubtitleProvider() {
+            @Override
+            public String getSubtitle(Photo photo) {
+                return String.format("Number of votes: %s", photo.getVotes());
+            }
+        };
+        adapter = new PhotoAdapter(getContext(), photoList, getString(R.string.vote_title), subtitleProvider ,photo -> {
             voteForPhoto(URI.create(photo.getUri()),photo.getOwner());
         });
         binding.recyclerPhotos.setAdapter(adapter);
@@ -160,7 +166,7 @@ public class GalleryFragment extends Fragment {
                         Utils.showMessage(getContext(), getString(R.string.notification_warn_select_photo), Utils.MessageType.WARN);
                     }
                 })
-                .setNegativeButton(getString(R.string.dialog_cancel_button), null)
+                .setNegativeButton("Cancelar", null)
                 .show();
     }
 

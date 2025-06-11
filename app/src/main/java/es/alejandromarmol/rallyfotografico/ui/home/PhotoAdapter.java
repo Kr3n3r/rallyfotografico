@@ -57,7 +57,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
         Photo item = photoList.get(position);
 
         holder.title.setText(item.getName());
-        holder.subtitle.setText(item.getDescription());
+        String subtitle = (subtitleProvider != null) ? subtitleProvider.getSubtitle(item) : item.getDescription();
+        holder.subtitle.setText(subtitle);
         holder.author.setText("By " + item.getOwnerName());
         holder.button.setText(buttonText);
 
