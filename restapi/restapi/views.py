@@ -16,7 +16,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['create', 'list'] :
             return [AllowAny()]
-        elif self.action in ['update', 'partial_update', 'retrieve']:
+        elif self.action in ['retrieve']:
             return [IsAuthenticated()]
         else:
             return [IsAdminUser()]
@@ -36,7 +36,7 @@ class RoleViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list'] :
             return [AllowAny()]
-        elif self.action in ['create', 'update', 'partial_update', 'retrieve']:
+        elif self.action in ['retrieve']:
             return [IsAuthenticated()]
         else:
             return [IsAdminUser()]
@@ -52,7 +52,7 @@ class ContestViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list'] :
             return [AllowAny()]
-        elif self.action in ['create', 'update', 'partial_update', 'retrieve']:
+        elif self.action in ['retrieve']:
             return [IsAuthenticated()]
         else:
             return [IsAdminUser()]
@@ -74,7 +74,7 @@ class PhotoViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action in ['list'] :
             return [AllowAny()]
-        elif self.action in ['create', 'update', 'partial_update', 'retrieve']:
+        elif self.action in ['destroy','create', 'update', 'partial_update', 'retrieve']:
             return [IsAuthenticated()]
         else:
             return [IsAdminUser()]

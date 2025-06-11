@@ -160,7 +160,7 @@ public class GalleryFragment extends Fragment {
                         Utils.showMessage(getContext(), getString(R.string.notification_warn_select_photo), Utils.MessageType.WARN);
                     }
                 })
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(getString(R.string.dialog_cancel_button), null)
                 .show();
     }
 
