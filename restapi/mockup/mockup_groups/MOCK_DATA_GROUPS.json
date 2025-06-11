@@ -1,0 +1,42 @@
+[
+  {
+    "model": "auth.group",
+    "pk": 10,
+    "fields": {
+      "name": "Admin",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 20,
+    "fields": {
+      "name": "Participant",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 30,
+    "fields": {
+      "name": "Judge",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 40,
+    "fields": {
+      "name": "Photographer",
+      "permissions": []
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 50,
+    "fields": {
+      "name": "Organizer",
+      "permissions": []
+    }
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "model": "auth.user_group",
+    "pk": 10,
+    "fields": {
+      "user_id": "10",
+      "group_id": "10"
+    }
+  },
+  {
+    "model": "auth.user_group",
+    "pk": 20,
+    "fields": {
+      "user_id": "20",
+      "group_id": "20"
+    }
+  },
+  {
+    "model": "auth.user_group",
+    "pk": 30,
+    "fields": {
+      "user_id": "30",
+      "group_id": "30"
+    }
+  },
+  {
+    "model": "auth.user_group",
+    "pk": 40,
+    "fields": {
+      "user_id": "40",
+      "group_id": "40"
+    }
+  },
+  {
+    "model": "auth.user_group",
+    "pk": 50,
+    "fields": {
+      "user_id": "50",
+      "group_id": "50"
+    }
+  }
+]
