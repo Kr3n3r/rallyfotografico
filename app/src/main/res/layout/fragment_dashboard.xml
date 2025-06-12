@@ -59,7 +59,7 @@
                     android:id="@+id/btnEditContest"
                     style="@style/RoundedButton"
                     android:background="@null"
-                    android:text="Edit"
+                    android:text="@string/edit_user_button"
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content" />
 
@@ -70,7 +70,7 @@
         <TextView
             android:id="@+id/tvUsersLabel"
             style="@style/TextSubtitle"
-            android:text="Users"
+            android:text="@string/users_title"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
             android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
         <TextView
             android:id="@+id/tvSubmittedPhotos"
             style="@style/TextSubtitle"
-            android:text="Submitted Photos"
+            android:text="@string/submitted_photos_title"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
             android:layout_height="wrap_content"

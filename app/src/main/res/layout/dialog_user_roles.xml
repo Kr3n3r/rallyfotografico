@@ -19,14 +19,14 @@
 
             <TableRow>
                 <TextView
-                    android:text="Role"
+                    android:text="@string/role"
                     android:textStyle="bold"
                     android:padding="8dp"
                     android:layout_width="0dp"
                     android:layout_weight="1" />
 
                 <TextView
-                    android:text="Action"
+                    android:text="@string/action"
                     android:textStyle="bold"
                     android:padding="8dp"
                     android:layout_width="wrap_content" />

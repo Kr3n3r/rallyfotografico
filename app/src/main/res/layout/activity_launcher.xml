@@ -15,7 +15,7 @@
         app:tint="@color/white" />
 
     <TextView
-        android:text="Photo Rally"
+        android:text="@string/app_name"
         android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"/>
 
     <TextView
-        android:text="Join the photography rally and capture stunning moments!"
+        android:text="@string/app_description"
         android:textColor="@color/white"
         android:textAlignment="center"
         android:gravity="center"
@@ -34,7 +34,7 @@
 
     <Button
         android:id="@+id/btn_get_started"
-        android:text="Get Started"
+        android:text="@string/get_started_button_text"
         android:layout_marginTop="32dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

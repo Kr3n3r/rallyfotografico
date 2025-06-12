@@ -59,7 +59,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
         holder.title.setText(item.getName());
         String subtitle = (subtitleProvider != null) ? subtitleProvider.getSubtitle(item) : item.getDescription();
         holder.subtitle.setText(subtitle);
-        holder.author.setText("By " + item.getOwnerName());
+        holder.author.setText(context.getString(R.string.by_subtitle) + " " + item.getOwnerName());
         holder.button.setText(buttonText);
 
         Glide.with(context)

@@ -77,7 +77,7 @@ public class DashboardFragment extends Fragment {
 
         // Configurar RecyclerView
         binding.rvSubmittedPhotos.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new PhotoAdapter(getContext(), photoList, getString(R.string.delete_photo_button), photo -> String.format("Number of votes: %s", photo.getVotes()) , photo -> {
+        adapter = new PhotoAdapter(getContext(), photoList, getString(R.string.delete_photo_button), photo -> String.format(getString(R.string.number_of_votes_subtitle)+ photo.getVotes()) , photo -> {
             Utils.destroyPhoto(getParentFragment(),photo, null);
             requireActivity().runOnUiThread(() -> {
                 Utils.loadPhotos(this, adapter, photoList);

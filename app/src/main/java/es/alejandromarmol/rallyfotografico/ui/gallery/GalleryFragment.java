@@ -80,7 +80,7 @@ public class GalleryFragment extends Fragment {
         PhotoAdapter.SubtitleProvider subtitleProvider = new PhotoAdapter.SubtitleProvider() {
             @Override
             public String getSubtitle(Photo photo) {
-                return String.format("Number of votes: %s", photo.getVotes());
+                return String.format(getString(R.string.number_of_votes_subtitle)+photo.getVotes());
             }
         };
         adapter = new PhotoAdapter(getContext(), photoList, getString(R.string.vote_title), subtitleProvider ,photo -> {
