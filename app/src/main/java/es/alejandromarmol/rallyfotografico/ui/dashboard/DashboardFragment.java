@@ -390,7 +390,7 @@ public class DashboardFragment extends Fragment {
 
                         Button actionButton = new Button(getContext());
                         boolean hasRole = user.getGroups().contains(role.getId());
-                        actionButton.setText(hasRole ? "Remove" : "Assign");
+                        actionButton.setText(hasRole ? getString(R.string.delete_photo_button) : getString(R.string.assign));
 
                         actionButton.setOnClickListener(v -> {
                             boolean currentlyHasRole = user.getGroups().contains(role.getId());
@@ -399,12 +399,12 @@ public class DashboardFragment extends Fragment {
                                 List<String> groups = user.getGroups();
                                 groups.remove(Integer.valueOf(role.getId()));
                                 user.setGroups(groups);
-                                actionButton.setText("Assign");
+                                actionButton.setText(getString(R.string.assign));
                             } else {
                                 List<String> groups = user.getGroups();
                                 groups.add(role.getId().toString());
                                 user.setGroups(groups);
-                                actionButton.setText("Remove");
+                                actionButton.setText(getString(R.string.delete_photo_button));
                             }
 
                             // Actualizar el usuario en un hilo nuevo

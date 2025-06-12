@@ -67,6 +67,8 @@
     <string name="notification_error_retrieving_roles_body">Error al obtener roles</string>
     <string name="notification_ok_deleting_user_body">Usuario eliminado correctamente</string>
     <string name="notification_error_getting_description">Error al obtener la descripción</string>
+    <string name="notification_error_updating_roles">Error al actualizar los roles. Puede que no sea administrador</string>
+    <string name="notification_ok_updating_roles">Roles actualizados correctamente</string>
     <string name="edit_contest_title">Administrar datos e información del concurso</string>
     <string name="contest_name_hint">Nombre del concurso</string>
     <string name="contest_description_hint">Descripción del concurso aquí</string>
@@ -101,4 +103,5 @@
     <string name="log_in_link">¿Ya estás registrado? Inicia sesión</string>
     <string name="role">Rol</string>
     <string name="action">Acción</string>
+    <string name="assign">Asignar</string>
 </resources>
